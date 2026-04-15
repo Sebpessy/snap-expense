@@ -1,0 +1,16 @@
+node_modules/
+.expo/
+dist/
+web-build/
+ios/
+android/
+.env
+.env.local
+*.jks
+*.p12
+*.key
+*.mobileprovision
+.DS_Store
+npm-debug.*
+yarn-error.*
+expo-env.d.ts
