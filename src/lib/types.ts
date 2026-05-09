@@ -23,20 +23,30 @@ export type LineItem = {
 
 export type ExtractionResult = {
   merchant: string | null;
-  expense_date: string | null; // YYYY-MM-DD
+  expense_date: string | null;
   amount_cents: number | null;
   currency: string;
   category_code: string;
-  category_confidence: number; // 0-1
+  category_confidence: number;
   business_purpose: string | null;
   is_business: boolean;
   line_items: LineItem[];
   warnings: string[];
 };
 
+export type UserPlan = {
+  plan: "free" | "pro" | "business";
+  trialActive: boolean;
+  trialEndsAt: string | null;
+  scanCount: number;
+  scanLimit: number | null; // null = unlimited
+  canScan: boolean;
+  hasApiKey: boolean;
+};
+
 export function formatCents(
   cents: number | null | undefined,
-  currency = "USD"
+  currency = "USD",
 ): string {
   if (cents == null) return "—";
   return new Intl.NumberFormat("en-US", {
