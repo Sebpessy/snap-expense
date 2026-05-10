@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     {
       stripe_event_id: event.id,
       event_type: event.type,
-      payload: event.data.object as Record<string, unknown>,
+      payload: event.data.object as unknown as Record<string, unknown>,
       processed: true,
       processed_at: new Date().toISOString(),
     },

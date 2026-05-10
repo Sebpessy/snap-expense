@@ -78,8 +78,8 @@ export default async function AdminDashboardPage() {
 
   // Calculate MRR
   const mrr = (activeSubscriptions ?? []).reduce((sum, sub) => {
-    if (sub.plan === "pro") return sum + PLAN_PRICES.pro;
-    if (sub.plan === "business") return sum + PLAN_PRICES.business * (sub.quantity ?? 1);
+    if (sub.plan === "pro") return sum + PLAN_PRICES.pro.monthly;
+    if (sub.plan === "business") return sum + PLAN_PRICES.business.monthly * (sub.quantity ?? 1);
     return sum;
   }, 0);
 

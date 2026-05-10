@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import { Receipt, Camera, Settings } from "lucide-react";
 
 const tabs = [
-  { href: "/expenses", label: "Expenses", icon: Receipt },
+  { href: "/expenses", label: "Expenses", icon: Receipt, highlight: false },
   { href: "/capture", label: "Capture", icon: Camera, highlight: true },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/settings", label: "Settings", icon: Settings, highlight: false },
 ] as const;
 
 export function BottomNav() {

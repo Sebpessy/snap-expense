@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Camera, Loader2, AlertTriangle, Check, Receipt } from "lucide-react";
 import { CategoryPicker } from "@/components/category-picker";
-import { getCategory, SCHEDULE_C_CATEGORIES } from "@/lib/categories";
+import { getCategory } from "@/lib/categories";
 import { formatCents, type UserPlan, type ExtractionResult } from "@/lib/types";
 import { extractReceiptAction, saveExpenseAction } from "./actions";
 
@@ -417,15 +417,17 @@ export function CaptureClient({
 
       {/* Category Picker Modal */}
       {showCategoryPicker && (
-        <CategoryPicker
-          categories={SCHEDULE_C_CATEGORIES}
-          selectedCode={categoryCode}
-          onSelect={(code) => {
-            setCategoryCode(code);
-            setShowCategoryPicker(false);
-          }}
-          onClose={() => setShowCategoryPicker(false)}
-        />
+        <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setShowCategoryPicker(false)}>
+          <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl max-h-[80vh] overflow-auto p-4" onClick={(e) => e.stopPropagation()}>
+            <CategoryPicker
+              value={categoryCode}
+              onChange={(code) => {
+                setCategoryCode(code);
+                setShowCategoryPicker(false);
+              }}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
