@@ -22,6 +22,13 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
+-- SECURITY DEFINER helper to check admin role — avoids RLS recursion when
+-- admin policies on profiles reference profiles.
+create or replace function public.is_admin()
+returns boolean language sql security definer stable set search_path = public as $$
+  select coalesce((select role = 'admin' from public.profiles where id = auth.uid()), false);
+$$;
+
 -- Users can read their own profile (but NOT the encrypted_anthropic_key via RLS —
 -- we use a security definer function for that)
 create policy "profiles self read" on public.profiles
@@ -33,13 +40,9 @@ create policy "profiles self insert" on public.profiles
 
 -- Admin can read all profiles
 create policy "admin read all profiles" on public.profiles
-  for select using (
-    exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin')
-  );
+  for select using (public.is_admin());
 create policy "admin update all profiles" on public.profiles
-  for update using (
-    exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin')
-  );
+  for update using (public.is_admin());
 
 -- Auto-create profile on signup with 14-day trial
 create or replace function public.handle_new_user()
@@ -113,9 +116,7 @@ create policy "expenses owner delete" on public.expenses for delete using (auth.
 
 -- Admin can read all expenses
 create policy "admin read all expenses" on public.expenses
-  for select using (
-    exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin')
-  );
+  for select using (public.is_admin());
 
 -- Auto-update updated_at
 create or replace function public.touch_updated_at()
@@ -152,9 +153,7 @@ alter table public.subscriptions enable row level security;
 create policy "subscriptions owner select" on public.subscriptions
   for select using (auth.uid() = user_id);
 create policy "admin read all subscriptions" on public.subscriptions
-  for select using (
-    exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin')
-  );
+  for select using (public.is_admin());
 
 create trigger subscriptions_touch before update on public.subscriptions
   for each row execute function public.touch_updated_at();
@@ -175,9 +174,7 @@ create table if not exists public.webhook_events (
 alter table public.webhook_events enable row level security;
 
 create policy "admin read webhook events" on public.webhook_events
-  for select using (
-    exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin')
-  );
+  for select using (public.is_admin());
 
 -- ═══════════════════════════════════════════════════════
 -- STORAGE: private receipts bucket
