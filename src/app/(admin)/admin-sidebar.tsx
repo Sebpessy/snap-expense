@@ -11,6 +11,7 @@ import {
   ArrowLeft,
   Menu,
   X,
+  Tag,
 } from "lucide-react";
 
 const navItems = [
@@ -18,6 +19,7 @@ const navItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/subscriptions", label: "Subscriptions", icon: CreditCard },
   { href: "/admin/webhooks", label: "Webhooks", icon: Webhook },
+  { href: "/admin/category-requests", label: "Category Requests", icon: Tag },
 ];
 
 export function AdminSidebar() {
