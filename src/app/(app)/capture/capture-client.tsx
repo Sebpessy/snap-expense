@@ -567,7 +567,7 @@ export function CaptureClient({
           {/* Save Button */}
           <button
             type="button"
-            onClick={handleSaveClick}
+            onClick={() => handleSaveClick()}
             disabled={stage === "saving"}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
