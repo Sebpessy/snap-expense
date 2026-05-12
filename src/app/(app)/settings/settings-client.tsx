@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   Key,
   CreditCard,
@@ -9,6 +10,8 @@ import {
   Shield,
   Check,
   ChevronRight,
+  Hammer,
+  Tag,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -163,6 +166,57 @@ export function SettingsClient({
           </div>
         </div>
       </section>
+
+      {/* Payment Cards link */}
+      <Link
+        href="/settings/cards"
+        className="mb-3 flex items-center justify-between rounded-xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+      >
+        <div className="flex items-center gap-3">
+          <CreditCard className="h-4 w-4 text-gray-400" />
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Payment cards</p>
+            <p className="text-xs text-gray-500">
+              Manage which cards are business vs personal
+            </p>
+          </div>
+        </div>
+        <ChevronRight className="h-4 w-4 text-gray-300" />
+      </Link>
+
+      {/* Subs link */}
+      <Link
+        href="/settings/subs"
+        className="mb-3 flex items-center justify-between rounded-xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+      >
+        <div className="flex items-center gap-3">
+          <Hammer className="h-4 w-4 text-gray-400" />
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Subcontractors</p>
+            <p className="text-xs text-gray-500">
+              1099 contractors you pay — track YTD spend &amp; aliases
+            </p>
+          </div>
+        </div>
+        <ChevronRight className="h-4 w-4 text-gray-300" />
+      </Link>
+
+      {/* Merchant aliases link */}
+      <Link
+        href="/settings/aliases"
+        className="mb-6 flex items-center justify-between rounded-xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+      >
+        <div className="flex items-center gap-3">
+          <Tag className="h-4 w-4 text-gray-400" />
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Merchant aliases</p>
+            <p className="text-xs text-gray-500">
+              Normalize names from receipts (e.g. STARBUCKS #4321 → Starbucks)
+            </p>
+          </div>
+        </div>
+        <ChevronRight className="h-4 w-4 text-gray-300" />
+      </Link>
 
       {/* Section 2: API Key */}
       <section className="mb-6 rounded-xl bg-white p-4 shadow-sm">

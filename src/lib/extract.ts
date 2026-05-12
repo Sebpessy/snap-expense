@@ -1,5 +1,5 @@
 import "server-only";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { resolveAnthropicKey } from "@/lib/anthropic-key";
 import { categoryCodes } from "./categories";
 
 const CATEGORY_CODE_LIST = categoryCodes();
@@ -18,7 +18,9 @@ Schema:
   "business_purpose": string | null,      // short, 3-10 words
   "is_business": boolean,                 // true unless clearly personal
   "line_items": [ { "description": string, "amount_cents": integer } ],
-  "warnings": string[]                    // e.g. "blurry total", "date missing"
+  "warnings": string[],                   // e.g. "blurry total", "date missing"
+  "payment_method": string | null,        // one of: "credit_card","check","zelle","wire","cash","other"
+  "card_last4": string | null             // 4-digit string if a card was used and the last 4 are visible
 }
 
 Allowed category_code values (IRS Schedule C):
@@ -28,6 +30,7 @@ Rules:
 - Always output valid JSON matching the schema exactly.
 - amount_cents is integer cents. No decimals.
 - Pick the single best category_code. If unclear, use "other" with lower confidence.
+- If a credit or debit card was used and the last 4 digits are printed on the receipt, set card_last4 to those exact 4 digits and payment_method to "credit_card". If the payment method is unclear, leave both null.
 - If the image is not a receipt, return nulls and warnings: ["not a receipt"].`;
 
 export async function extractReceiptWithUserKey(params: {
@@ -35,19 +38,12 @@ export async function extractReceiptWithUserKey(params: {
   imageBase64: string;
   mimeType: string;
 }) {
-  // Decrypt the user's API key
-  const adminClient = createAdminClient();
-  const secret = process.env.API_KEY_ENCRYPTION_SECRET;
-  if (!secret) throw new Error("API_KEY_ENCRYPTION_SECRET not configured");
+  const apiKey = await resolveAnthropicKey(params.userId);
 
-  const { data, error } = await adminClient.rpc("get_decrypted_key", {
-    user_uuid: params.userId,
-    secret,
-  });
-  if (error || !data)
-    throw new Error("No API key found. Add your Anthropic key in Settings.");
-
-  const apiKey = data as string;
+  if (!apiKey)
+    throw new Error(
+      "No Anthropic API key available. Set ANTHROPIC_API_KEY or add a key in Settings.",
+    );
 
   // Call Claude vision
   const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -119,6 +115,15 @@ function safeParseJson(text: string): any | null {
   }
 }
 
+const ALLOWED_PAYMENT_METHODS = new Set([
+  "credit_card",
+  "check",
+  "zelle",
+  "wire",
+  "cash",
+  "other",
+]);
+
 function normalize(raw: any) {
   const category_code = CATEGORY_CODE_LIST.includes(raw?.category_code)
     ? raw.category_code
@@ -129,6 +134,23 @@ function normalize(raw: any) {
   );
   const amount =
     raw?.amount_cents == null ? null : Math.round(Number(raw.amount_cents));
+
+  const payment_method =
+    typeof raw?.payment_method === "string" &&
+    ALLOWED_PAYMENT_METHODS.has(raw.payment_method)
+      ? (raw.payment_method as
+          | "credit_card"
+          | "check"
+          | "zelle"
+          | "wire"
+          | "cash"
+          | "other")
+      : null;
+
+  const card_last4 =
+    typeof raw?.card_last4 === "string" && /^\d{4}$/.test(raw.card_last4)
+      ? raw.card_last4
+      : null;
 
   return {
     merchant:
@@ -160,5 +182,7 @@ function normalize(raw: any) {
     warnings: Array.isArray(raw?.warnings)
       ? raw.warnings.map(String).filter(Boolean)
       : [],
+    payment_method,
+    card_last4,
   };
 }

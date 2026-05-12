@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { type Expense } from "@/lib/types";
+import { type Expense, type PaymentCard, type Sub } from "@/lib/types";
+import { signReceiptUrl } from "@/lib/signed-url";
 import { ExpenseDetailClient } from "./expense-detail-client";
 
 type Props = {
@@ -17,28 +18,36 @@ export default async function ExpenseDetailPage({ params }: Props) {
 
   if (!user) redirect("/login");
 
-  const { data: expense } = await supabase
-    .from("expenses")
-    .select("*")
-    .eq("id", id)
-    .eq("user_id", user.id)
-    .single();
+  const [{ data: expense }, { data: cards }, { data: subs }] = await Promise.all([
+    supabase
+      .from("expenses")
+      .select("*")
+      .eq("id", id)
+      .eq("user_id", user.id)
+      .single(),
+    supabase
+      .from("payment_cards")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("subs")
+      .select("*")
+      .eq("user_id", user.id)
+      .neq("status", "blacklisted")
+      .order("name"),
+  ]);
 
   if (!expense) redirect("/expenses");
 
-  // Get signed URL for receipt image if present
-  let receiptUrl: string | null = null;
-  if ((expense as Expense).receipt_path) {
-    const { data: signedData } = await supabase.storage
-      .from("receipts")
-      .createSignedUrl((expense as Expense).receipt_path!, 60 * 30);
-    receiptUrl = signedData?.signedUrl ?? null;
-  }
+  const receiptUrl = await signReceiptUrl((expense as Expense).receipt_path);
 
   return (
     <ExpenseDetailClient
       expense={expense as Expense}
       receiptUrl={receiptUrl}
+      existingCards={(cards ?? []) as PaymentCard[]}
+      existingSubs={(subs ?? []) as Sub[]}
     />
   );
 }

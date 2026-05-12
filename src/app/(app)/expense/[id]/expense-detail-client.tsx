@@ -2,28 +2,43 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Trash2, Receipt } from "lucide-react";
+import { ArrowLeft, Trash2, Receipt, ZoomIn } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CategoryPicker } from "@/components/category-picker";
-import { type Expense, formatCents } from "@/lib/types";
+import { PaymentMethodPicker } from "@/components/payment-method-picker";
+import { NewCardModal } from "@/components/new-card-modal";
+import { SubPicker } from "@/components/sub-picker";
+import { Lightbox } from "@/components/ui/lightbox";
+import {
+  type Expense,
+  type PaymentMethod,
+  type PaymentCard,
+  type Sub,
+  formatCents,
+} from "@/lib/types";
 import { updateExpenseAction, deleteExpenseAction } from "./actions";
 
 type ExpenseDetailClientProps = {
   expense: Expense;
   receiptUrl: string | null;
+  existingCards: PaymentCard[];
+  existingSubs: Sub[];
 };
 
 export function ExpenseDetailClient({
   expense,
   receiptUrl,
+  existingCards,
+  existingSubs,
 }: ExpenseDetailClientProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   // Form state
   const [merchant, setMerchant] = useState(expense.merchant ?? "");
@@ -41,9 +56,41 @@ export function ExpenseDetailClient({
   );
   const [notes, setNotes] = useState(expense.notes ?? "");
   const [isBusiness, setIsBusiness] = useState(expense.is_business);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(expense.payment_method);
+  const [cardLast4, setCardLast4] = useState<string | null>(expense.card_last4);
+  const [cardId, setCardId] = useState<string | null>(expense.card_id);
+  const [checkNumber, setCheckNumber] = useState(expense.check_number ?? "");
+  const [referenceNumber, setReferenceNumber] = useState(expense.reference_number ?? "");
+  const [newCardIsBusiness, setNewCardIsBusiness] = useState(true);
+  const [newCardNickname, setNewCardNickname] = useState("");
+  const [showNewCardModal, setShowNewCardModal] = useState(false);
+  const [subId, setSubId] = useState<string | null>(expense.sub_id);
+  const [localSubs, setLocalSubs] = useState<Sub[]>([]);
+  const allSubs = [...existingSubs, ...localSubs];
 
-  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (
+      paymentMethod === "credit_card" &&
+      cardLast4 &&
+      /^\d{4}$/.test(cardLast4) &&
+      !cardId &&
+      !existingCards.find((c) => c.last4 === cardLast4)
+    ) {
+      setShowNewCardModal(true);
+      return;
+    }
+    doSave();
+  };
+
+  const handleNewCardConfirm = ({ isBusiness, nickname }: { isBusiness: boolean; nickname: string }) => {
+    setNewCardIsBusiness(isBusiness);
+    setNewCardNickname(nickname);
+    setShowNewCardModal(false);
+    doSave({ newCard: { isBusiness, nickname } });
+  };
+
+  const doSave = async (opts?: { newCard?: { isBusiness: boolean; nickname: string } }) => {
     setIsSubmitting(true);
     setError(null);
 
@@ -55,6 +102,17 @@ export function ExpenseDetailClient({
     formData.set("business_purpose", businessPurpose);
     formData.set("notes", notes);
     formData.set("is_business", isBusiness ? "true" : "false");
+    if (paymentMethod) formData.set("payment_method", paymentMethod);
+    if (cardLast4) formData.set("card_last4", cardLast4);
+    if (cardId) formData.set("card_id", cardId);
+    if (checkNumber) formData.set("check_number", checkNumber);
+    if (referenceNumber) formData.set("reference_number", referenceNumber);
+    if (subId) formData.set("sub_id", subId);
+    else formData.set("sub_id", "");
+    const effectiveIsBusiness = opts?.newCard?.isBusiness ?? newCardIsBusiness;
+    const effectiveNickname = opts?.newCard?.nickname ?? newCardNickname;
+    formData.set("new_card_is_business", effectiveIsBusiness ? "true" : "false");
+    if (effectiveNickname) formData.set("new_card_nickname", effectiveNickname);
 
     const result = await updateExpenseAction(expense.id, formData);
 
@@ -95,17 +153,36 @@ export function ExpenseDetailClient({
       {/* Receipt image */}
       <div className="mb-6 overflow-hidden rounded-xl bg-gray-100">
         {receiptUrl ? (
-          <img
-            src={receiptUrl}
-            alt="Receipt"
-            className="mx-auto max-h-64 w-auto object-contain"
-          />
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(true)}
+            aria-label="View full receipt"
+            className="group relative block w-full focus:outline-none"
+          >
+            <img
+              src={receiptUrl}
+              alt="Receipt"
+              className="mx-auto max-h-64 w-auto object-contain transition-opacity group-hover:opacity-90"
+            />
+            <span className="pointer-events-none absolute right-2 top-2 rounded-full bg-black/50 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100">
+              <ZoomIn className="h-4 w-4" />
+            </span>
+          </button>
         ) : (
           <div className="flex h-40 items-center justify-center">
             <Receipt className="h-12 w-12 text-gray-300" />
           </div>
         )}
       </div>
+
+      {receiptUrl && (
+        <Lightbox
+          src={receiptUrl}
+          alt={`Receipt for ${expense.merchant ?? "expense"}`}
+          open={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
 
       {/* Amount display */}
       <div className="mb-6 text-center">
@@ -125,7 +202,7 @@ export function ExpenseDetailClient({
       )}
 
       {/* Edit form */}
-      <form onSubmit={handleSave} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           label="Merchant"
           name="merchant"
@@ -213,6 +290,38 @@ export function ExpenseDetailClient({
           </button>
         </div>
 
+        {/* Payment method */}
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
+          <PaymentMethodPicker
+            paymentMethod={paymentMethod}
+            cardLast4={cardLast4}
+            cardId={cardId}
+            checkNumber={checkNumber}
+            referenceNumber={referenceNumber}
+            newCardIsBusiness={newCardIsBusiness}
+            newCardNickname={newCardNickname}
+            onPaymentMethodChange={setPaymentMethod}
+            onCardLast4Change={(v) => setCardLast4(v || null)}
+            onCardIdChange={setCardId}
+            onCheckNumberChange={setCheckNumber}
+            onReferenceNumberChange={setReferenceNumber}
+            onNewCardIsBusinessChange={setNewCardIsBusiness}
+            onNewCardNicknameChange={setNewCardNickname}
+            existingCards={existingCards}
+          />
+        </div>
+
+        {/* Sub linkage */}
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
+          <SubPicker
+            subId={subId}
+            onChange={setSubId}
+            subs={allSubs}
+            onSubCreated={(s) => setLocalSubs((prev) => [...prev, s])}
+            highlight={categoryCode === "contract_labor"}
+          />
+        </div>
+
         {/* Actions */}
         <div className="flex gap-3 pt-2 pb-8">
           <Button
@@ -269,6 +378,13 @@ export function ExpenseDetailClient({
           </div>
         </div>
       )}
+
+      <NewCardModal
+        open={showNewCardModal}
+        last4={cardLast4 ?? ""}
+        onConfirm={handleNewCardConfirm}
+        onCancel={() => setShowNewCardModal(false)}
+      />
     </div>
   );
 }

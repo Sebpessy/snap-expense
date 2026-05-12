@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getUserPlan } from "@/lib/plans";
 import { type Expense } from "@/lib/types";
+import { signReceiptUrls } from "@/lib/signed-url";
 import { ExpensesClient } from "./expenses-client";
 
 export default async function ExpensesPage() {
@@ -29,6 +30,12 @@ export default async function ExpensesPage() {
 
   const expenses: Expense[] = expensesResult.data ?? [];
 
+  // Batch-sign receipt URLs for visible expenses
+  const signedUrls = await signReceiptUrls(expenses.map((e) => e.receipt_path));
+  const thumbUrls = Object.fromEntries(
+    expenses.map((e, i) => [e.id, signedUrls[i]] as const),
+  );
+
   const userPlan = profileResult.data
     ? getUserPlan(profileResult.data)
     : {
@@ -41,5 +48,11 @@ export default async function ExpensesPage() {
         hasApiKey: false,
       };
 
-  return <ExpensesClient expenses={expenses} userPlan={userPlan} />;
+  return (
+    <ExpensesClient
+      expenses={expenses}
+      userPlan={userPlan}
+      thumbUrls={thumbUrls}
+    />
+  );
 }

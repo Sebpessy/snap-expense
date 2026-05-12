@@ -3,20 +3,49 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Camera, Loader2, AlertTriangle, Check, Receipt } from "lucide-react";
+import {
+  Camera,
+  Loader2,
+  AlertTriangle,
+  Check,
+  ArrowLeft,
+  Copy,
+} from "lucide-react";
 import { CategoryPicker } from "@/components/category-picker";
+import { PaymentMethodPicker } from "@/components/payment-method-picker";
+import { NewCardModal } from "@/components/new-card-modal";
+import { SubPicker } from "@/components/sub-picker";
 import { getCategory } from "@/lib/categories";
-import { formatCents, type UserPlan, type ExtractionResult } from "@/lib/types";
+import {
+  formatCents,
+  formatDate,
+  type UserPlan,
+  type ExtractionResult,
+  type PaymentMethod,
+  type PaymentCard,
+  type Sub,
+} from "@/lib/types";
 import { extractReceiptAction, saveExpenseAction } from "./actions";
+
+type DuplicateOf = {
+  id: string;
+  merchant: string | null;
+  expense_date: string | null;
+  amount_cents: number | null;
+};
 
 type Stage = "idle" | "extracting" | "review" | "saving";
 
 export function CaptureClient({
   hasApiKey,
   userPlan,
+  existingCards,
+  existingSubs,
 }: {
   hasApiKey: boolean;
   userPlan: UserPlan;
+  existingCards: PaymentCard[];
+  existingSubs: Sub[];
 }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -26,6 +55,7 @@ export function CaptureClient({
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [extraction, setExtraction] = useState<ExtractionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [duplicateOf, setDuplicateOf] = useState<DuplicateOf | null>(null);
 
   // Editable form fields (populated from extraction)
   const [merchant, setMerchant] = useState("");
@@ -36,21 +66,44 @@ export function CaptureClient({
   const [isBusiness, setIsBusiness] = useState(true);
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
 
+  // Payment fields
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
+  const [cardLast4, setCardLast4] = useState<string | null>(null);
+  const [cardId, setCardId] = useState<string | null>(null);
+  const [checkNumber, setCheckNumber] = useState("");
+  const [referenceNumber, setReferenceNumber] = useState("");
+  const [newCardIsBusiness, setNewCardIsBusiness] = useState(true);
+  const [newCardNickname, setNewCardNickname] = useState("");
+  const [showNewCardModal, setShowNewCardModal] = useState(false);
+
+  // Sub linkage
+  const [subId, setSubId] = useState<string | null>(null);
+  // Local-only optimistic subs (newly created via picker) so they appear immediately
+  const [localSubs, setLocalSubs] = useState<Sub[]>([]);
+  const allSubs = [...existingSubs, ...localSubs];
+
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
     setImageFile(file);
     setImagePreviewUrl(URL.createObjectURL(file));
     setError(null);
+    // Reset the input so picking the SAME file again still triggers onChange
+    e.target.value = "";
+    // Fire extraction immediately — no need for the user to tap "Analyze"
+    if (hasApiKey && userPlan.canScan) {
+      handleExtract(file);
+    }
   }
 
-  async function handleExtract() {
-    if (!imageFile) return;
+  async function handleExtract(fileOverride?: File) {
+    const file = fileOverride ?? imageFile;
+    if (!file) return;
     setStage("extracting");
     setError(null);
 
     const formData = new FormData();
-    formData.append("image", imageFile);
+    formData.append("image", file);
 
     const result = await extractReceiptAction(formData);
 
@@ -74,13 +127,26 @@ export function CaptureClient({
     setCategoryCode(ext.category_code);
     setBusinessPurpose(ext.business_purpose ?? "");
     setIsBusiness(ext.is_business);
+    setPaymentMethod(ext.payment_method);
+    setCardLast4(ext.card_last4);
+    if (ext.card_last4) {
+      const match = existingCards.find((c) => c.last4 === ext.card_last4);
+      setCardId(match?.id ?? null);
+      if (match) setNewCardIsBusiness(match.is_business);
+    } else {
+      setCardId(null);
+    }
     setStage("review");
   }
 
-  async function handleSave() {
+  async function handleSave(opts?: {
+    skipDupeCheck?: boolean;
+    newCard?: { isBusiness: boolean; nickname: string };
+  }) {
     if (!imageFile) return;
     setStage("saving");
     setError(null);
+    setDuplicateOf(null);
 
     const formData = new FormData();
     formData.append("image", imageFile);
@@ -94,10 +160,26 @@ export function CaptureClient({
     formData.append("business_purpose", businessPurpose);
     formData.append("is_business", isBusiness ? "true" : "false");
     formData.append("raw_extraction", JSON.stringify(extraction));
+    if (paymentMethod) formData.append("payment_method", paymentMethod);
+    if (cardLast4) formData.append("card_last4", cardLast4);
+    if (cardId) formData.append("card_id", cardId);
+    if (checkNumber) formData.append("check_number", checkNumber);
+    if (referenceNumber) formData.append("reference_number", referenceNumber);
+    if (subId) formData.append("sub_id", subId);
+    const effectiveIsBusiness = opts?.newCard?.isBusiness ?? newCardIsBusiness;
+    const effectiveNickname = opts?.newCard?.nickname ?? newCardNickname;
+    formData.append("new_card_is_business", effectiveIsBusiness ? "true" : "false");
+    if (effectiveNickname) formData.append("new_card_nickname", effectiveNickname);
+    if (opts?.skipDupeCheck) formData.append("skip_dupe_check", "true");
 
     const result = await saveExpenseAction(formData);
 
     if (!result.success) {
+      if (result.error === "duplicate" && "duplicateOf" in result && result.duplicateOf) {
+        setDuplicateOf(result.duplicateOf as DuplicateOf);
+        setStage("review");
+        return;
+      }
       setError(result.error ?? "Failed to save expense");
       setStage("review");
       return;
@@ -105,6 +187,42 @@ export function CaptureClient({
 
     router.push("/expenses");
     router.refresh();
+  }
+
+  function handleBack() {
+    setStage("idle");
+    setExtraction(null);
+    setError(null);
+    setDuplicateOf(null);
+  }
+
+  // Save click — if a new card is being introduced, prompt for biz/personal first
+  const [pendingSaveOpts, setPendingSaveOpts] = useState<{ skipDupeCheck?: boolean } | null>(null);
+
+  function handleSaveClick(opts?: { skipDupeCheck?: boolean }) {
+    if (
+      paymentMethod === "credit_card" &&
+      cardLast4 &&
+      /^\d{4}$/.test(cardLast4) &&
+      !cardId &&
+      !existingCards.find((c) => c.last4 === cardLast4)
+    ) {
+      setPendingSaveOpts(opts ?? null);
+      setShowNewCardModal(true);
+      return;
+    }
+    handleSave(opts);
+  }
+
+  function handleNewCardConfirm({ isBusiness, nickname }: { isBusiness: boolean; nickname: string }) {
+    setNewCardIsBusiness(isBusiness);
+    setNewCardNickname(nickname);
+    setShowNewCardModal(false);
+    handleSave({
+      ...(pendingSaveOpts ?? {}),
+      newCard: { isBusiness, nickname },
+    });
+    setPendingSaveOpts(null);
   }
 
   const category = getCategory(categoryCode);
@@ -187,27 +305,6 @@ export function CaptureClient({
             className="hidden"
           />
 
-          {imagePreviewUrl && (
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="flex-1 rounded-xl border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
-              >
-                Change photo
-              </button>
-              <button
-                type="button"
-                onClick={handleExtract}
-                disabled={!hasApiKey || !userPlan.canScan}
-                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <Receipt className="h-4 w-4" />
-                Analyze receipt
-              </button>
-            </div>
-          )}
-
           {/* Scan counter */}
           {userPlan.scanLimit !== null && (
             <p className="text-center text-xs text-gray-500">
@@ -242,6 +339,51 @@ export function CaptureClient({
       {/* Stage: review / saving */}
       {(stage === "review" || stage === "saving") && extraction && (
         <div className="space-y-4">
+          {/* Back button */}
+          <button
+            type="button"
+            onClick={handleBack}
+            disabled={stage === "saving"}
+            className="inline-flex items-center gap-1 text-sm text-gray-500 transition-colors hover:text-gray-700 disabled:opacity-50"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </button>
+
+          {/* Duplicate warning */}
+          {duplicateOf && (
+            <div className="rounded-xl border border-amber-300 bg-amber-50 p-4">
+              <div className="flex items-start gap-2">
+                <Copy className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
+                <div className="flex-1 space-y-2">
+                  <p className="text-sm font-medium text-amber-900">
+                    Possible duplicate
+                  </p>
+                  <p className="text-sm text-amber-800">
+                    {duplicateOf.merchant || "Unknown"} ·{" "}
+                    {formatCents(duplicateOf.amount_cents)} ·{" "}
+                    {formatDate(duplicateOf.expense_date)}
+                  </p>
+                  <div className="flex gap-2 pt-1">
+                    <Link
+                      href={`/expense/${duplicateOf.id}`}
+                      className="rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-medium text-amber-900 hover:bg-amber-100"
+                    >
+                      View existing
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => handleSaveClick({ skipDupeCheck: true })}
+                      className="rounded-lg bg-amber-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-amber-700"
+                    >
+                      Save anyway
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Receipt thumbnail */}
           {imagePreviewUrl && (
             <div className="flex justify-center">
@@ -308,11 +450,10 @@ export function CaptureClient({
                 Date
               </label>
               <input
-                type="text"
+                type="date"
                 value={expenseDate}
                 onChange={(e) => setExpenseDate(e.target.value)}
                 disabled={stage === "saving"}
-                placeholder="YYYY-MM-DD"
                 className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none disabled:opacity-50"
               />
             </div>
@@ -369,6 +510,36 @@ export function CaptureClient({
                 Business expense (tax deductible)
               </span>
             </label>
+
+            {/* Payment method */}
+            <PaymentMethodPicker
+              paymentMethod={paymentMethod}
+              cardLast4={cardLast4}
+              cardId={cardId}
+              checkNumber={checkNumber}
+              referenceNumber={referenceNumber}
+              newCardIsBusiness={newCardIsBusiness}
+              newCardNickname={newCardNickname}
+              onPaymentMethodChange={setPaymentMethod}
+              onCardLast4Change={(v) => setCardLast4(v || null)}
+              onCardIdChange={setCardId}
+              onCheckNumberChange={setCheckNumber}
+              onReferenceNumberChange={setReferenceNumber}
+              onNewCardIsBusinessChange={setNewCardIsBusiness}
+              onNewCardNicknameChange={setNewCardNickname}
+              existingCards={existingCards}
+              disabled={stage === "saving"}
+            />
+
+            {/* Sub linkage */}
+            <SubPicker
+              subId={subId}
+              onChange={setSubId}
+              subs={allSubs}
+              onSubCreated={(s) => setLocalSubs((prev) => [...prev, s])}
+              disabled={stage === "saving"}
+              highlight={categoryCode === "contract_labor"}
+            />
           </div>
 
           {/* Line Items */}
@@ -396,7 +567,7 @@ export function CaptureClient({
           {/* Save Button */}
           <button
             type="button"
-            onClick={handleSave}
+            onClick={handleSaveClick}
             disabled={stage === "saving"}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -414,6 +585,17 @@ export function CaptureClient({
           </button>
         </div>
       )}
+
+      {/* New Card Confirmation Modal */}
+      <NewCardModal
+        open={showNewCardModal}
+        last4={cardLast4 ?? ""}
+        onConfirm={handleNewCardConfirm}
+        onCancel={() => {
+          setShowNewCardModal(false);
+          setPendingSaveOpts(null);
+        }}
+      />
 
       {/* Category Picker Modal */}
       {showCategoryPicker && (
