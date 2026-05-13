@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Receipt, Camera, Settings, LayoutDashboard, MessageSquare } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 const tabs = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -18,8 +19,8 @@ export function TopNav() {
   return (
     <nav className="hidden lg:block sticky top-0 z-40 border-b border-gray-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-6">
-        <Link href="/expenses" className="flex items-center gap-1 text-base font-bold text-gray-900">
-          <span className="text-lg">📸</span>
+        <Link href="/expenses" className="flex items-center gap-2 text-base font-bold text-gray-900">
+          <Logo size={28} className="rounded-md" />
           <span>Snap Expense</span>
         </Link>
         <div className="flex items-center gap-1">

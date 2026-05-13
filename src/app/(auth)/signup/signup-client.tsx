@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Logo } from "@/components/logo";
 
 export function SignupClient() {
   const router = useRouter();
@@ -43,7 +44,8 @@ export function SignupClient() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="mb-8 text-center">
+      <div className="mb-8 flex flex-col items-center text-center">
+        <Logo size={72} className="mb-3 rounded-2xl shadow-sm" />
         <h1 className="text-3xl font-bold text-gray-900">Create account</h1>
         <p className="mt-2 text-sm text-gray-500">
           Built for freelancers. Tax-ready from day one.

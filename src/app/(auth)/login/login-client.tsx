@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Logo } from "@/components/logo";
 
 export function LoginClient() {
   const router = useRouter();
@@ -35,10 +36,9 @@ export function LoginClient() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-900">
-          <span className="mr-1">📸</span> Snap Expense
-        </h1>
+      <div className="mb-8 flex flex-col items-center text-center">
+        <Logo size={72} className="mb-3 rounded-2xl shadow-sm" />
+        <h1 className="text-3xl font-bold text-gray-900">Snap Expense</h1>
         <p className="mt-2 text-sm text-gray-500">
           Snap a receipt. We'll handle the rest.
         </p>
