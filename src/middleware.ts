@@ -50,11 +50,14 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const authPages = ["/login", "/signup", "/auth/callback"];
+  const authPages = ["/login", "/signup", "/auth/callback", "/forgot-password"];
   const isAuthPage = authPages.some((page) => pathname.startsWith(page));
+  // /reset-password lives in the same group but needs the recovery session, so
+  // we don't bounce authed users off it.
+  const isResetPage = pathname.startsWith("/reset-password");
 
   // Not authenticated and not on auth page → redirect to login
-  if (!user && !isAuthPage) {
+  if (!user && !isAuthPage && !isResetPage) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
