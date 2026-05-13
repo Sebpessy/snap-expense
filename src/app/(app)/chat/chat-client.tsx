@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Loader2, Send, MessageSquare, AlertTriangle, Check, ArrowLeft } from "lucide-react";
+import { Loader2, Send, MessageSquare, AlertTriangle, Check, ArrowLeft, Mic, Square } from "lucide-react";
 import { CategoryPicker } from "@/components/category-picker";
 import { PaymentMethodPicker } from "@/components/payment-method-picker";
 import { NewCardModal } from "@/components/new-card-modal";
 import { SubPicker } from "@/components/sub-picker";
 import { getCategory } from "@/lib/categories";
+import { useVoiceInput } from "@/lib/use-voice-input";
 import {
   formatCents,
   type UserPlan,
@@ -60,8 +61,19 @@ export function ChatClient({
   const [localSubs, setLocalSubs] = useState<Sub[]>([]);
   const allSubs = [...existingSubs, ...localSubs];
 
+  const voice = useVoiceInput({
+    onFinal: (text) => {
+      setMessage((prev) => {
+        const trimmed = prev.trimEnd();
+        const sep = trimmed && !/[.!?]$/.test(trimmed) ? " " : trimmed ? " " : "";
+        return trimmed + sep + text.trim();
+      });
+    },
+  });
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (voice.listening) voice.stop();
     if (!message.trim()) return;
     setStage("thinking");
     setError(null);
@@ -207,15 +219,42 @@ export function ChatClient({
       {/* Compose stage */}
       {(stage === "idle" || stage === "thinking") && (
         <form onSubmit={handleSubmit} className="space-y-3">
-          <textarea
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            disabled={stage === "thinking" || !hasApiKey || !userPlan.canScan}
-            rows={4}
-            placeholder="Spent $45 on home depot lumber last Tuesday, business…"
-            className="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50"
-            autoFocus
-          />
+          <div className="relative">
+            <textarea
+              value={message + (voice.interim ? (message.trimEnd() ? " " : "") + voice.interim : "")}
+              onChange={(e) => setMessage(e.target.value)}
+              disabled={stage === "thinking" || !hasApiKey || !userPlan.canScan}
+              rows={4}
+              placeholder={voice.listening ? "Listening… speak now" : "Spent $45 on home depot lumber last Tuesday, business…"}
+              className="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 pr-12 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50"
+              autoFocus
+            />
+            {voice.supported && (
+              <button
+                type="button"
+                onClick={() => (voice.listening ? voice.stop() : voice.start())}
+                disabled={stage === "thinking" || !hasApiKey || !userPlan.canScan}
+                aria-label={voice.listening ? "Stop voice input" : "Start voice input"}
+                aria-pressed={voice.listening}
+                className={
+                  "absolute bottom-2 right-2 flex h-9 w-9 items-center justify-center rounded-full text-white shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 " +
+                  (voice.listening
+                    ? "animate-pulse bg-red-600 hover:bg-red-700"
+                    : "bg-indigo-600 hover:bg-indigo-700")
+                }
+              >
+                {voice.listening ? <Square className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+              </button>
+            )}
+          </div>
+          {voice.error && (
+            <p className="text-xs text-red-600">{voice.error}</p>
+          )}
+          {!voice.supported && (
+            <p className="text-xs text-gray-400">
+              Voice input isn&rsquo;t supported in this browser — try Safari or Chrome.
+            </p>
+          )}
           <button
             type="submit"
             disabled={stage === "thinking" || !message.trim() || !hasApiKey || !userPlan.canScan}
