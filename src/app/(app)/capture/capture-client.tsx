@@ -10,12 +10,17 @@ import {
   Check,
   ArrowLeft,
   Copy,
+  Mic,
+  Square,
+  Send,
+  MessageSquare,
 } from "lucide-react";
 import { CategoryPicker } from "@/components/category-picker";
 import { PaymentMethodPicker } from "@/components/payment-method-picker";
 import { NewCardModal } from "@/components/new-card-modal";
 import { SubPicker } from "@/components/sub-picker";
 import { getCategory } from "@/lib/categories";
+import { useVoiceInput } from "@/lib/use-voice-input";
 import {
   formatCents,
   formatDate,
@@ -34,7 +39,9 @@ type DuplicateOf = {
   amount_cents: number | null;
 };
 
-type Stage = "idle" | "extracting" | "review" | "saving";
+type Stage = "idle" | "extracting" | "thinking" | "review" | "saving";
+
+type EntrySource = "photo" | "chat" | null;
 
 export function CaptureClient({
   hasApiKey,
@@ -51,11 +58,25 @@ export function CaptureClient({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [stage, setStage] = useState<Stage>("idle");
+  const [entrySource, setEntrySource] = useState<EntrySource>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [extraction, setExtraction] = useState<ExtractionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [duplicateOf, setDuplicateOf] = useState<DuplicateOf | null>(null);
+
+  // Chat-style entry
+  const [chatMessage, setChatMessage] = useState("");
+  const [lastChatMessage, setLastChatMessage] = useState("");
+  const voice = useVoiceInput({
+    onFinal: (text) => {
+      setChatMessage((prev) => {
+        const trimmed = prev.trimEnd();
+        const sep = trimmed && !/[.!?]$/.test(trimmed) ? " " : "";
+        return trimmed + sep + text.trim();
+      });
+    },
+  });
 
   // Editable form fields (populated from extraction)
   const [merchant, setMerchant] = useState("");
@@ -87,12 +108,66 @@ export function CaptureClient({
     if (!file) return;
     setImageFile(file);
     setImagePreviewUrl(URL.createObjectURL(file));
+    setEntrySource("photo");
     setError(null);
     // Reset the input so picking the SAME file again still triggers onChange
     e.target.value = "";
     // Fire extraction immediately — no need for the user to tap "Analyze"
     if (hasApiKey && userPlan.canScan) {
       handleExtract(file);
+    }
+  }
+
+  async function handleChatSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (voice.listening) voice.stop();
+    if (!chatMessage.trim()) return;
+    setEntrySource("chat");
+    setStage("thinking");
+    setError(null);
+    setLastChatMessage(chatMessage);
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ message: chatMessage }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data?.error ?? "Request failed");
+        setStage("idle");
+        return;
+      }
+      const ext = data.extraction as ExtractionResult;
+      setExtraction(ext);
+      setMerchant(ext.merchant ?? "");
+      setAmount(
+        ext.amount_cents != null ? (ext.amount_cents / 100).toFixed(2) : "",
+      );
+      setExpenseDate(ext.expense_date ?? "");
+      setCategoryCode(ext.category_code);
+      setBusinessPurpose(ext.business_purpose ?? "");
+      setIsBusiness(ext.is_business);
+      setPaymentMethod(ext.payment_method);
+      setCardLast4(ext.card_last4);
+      if (ext.card_last4) {
+        const match = existingCards.find((c) => c.last4 === ext.card_last4);
+        setCardId(match?.id ?? null);
+        if (match) setNewCardIsBusiness(match.is_business);
+      }
+      // Chat extraction may include check_number / reference_number — prefill if present
+      const extWithRefs = ext as ExtractionResult & {
+        check_number?: string | null;
+        reference_number?: string | null;
+      };
+      if (extWithRefs.check_number) setCheckNumber(extWithRefs.check_number);
+      if (extWithRefs.reference_number) setReferenceNumber(extWithRefs.reference_number);
+      setChatMessage("");
+      setStage("review");
+    } catch (err) {
+      setError((err as Error).message || "Network error");
+      setStage("idle");
     }
   }
 
@@ -143,13 +218,14 @@ export function CaptureClient({
     skipDupeCheck?: boolean;
     newCard?: { isBusiness: boolean; nickname: string };
   }) {
-    if (!imageFile) return;
+    // Photo entries need a file; chat entries don't have one.
+    if (entrySource === "photo" && !imageFile) return;
     setStage("saving");
     setError(null);
     setDuplicateOf(null);
 
     const formData = new FormData();
-    formData.append("image", imageFile);
+    if (imageFile) formData.append("image", imageFile);
     formData.append("merchant", merchant);
     formData.append(
       "amount_cents",
@@ -170,7 +246,8 @@ export function CaptureClient({
     const effectiveNickname = opts?.newCard?.nickname ?? newCardNickname;
     formData.append("new_card_is_business", effectiveIsBusiness ? "true" : "false");
     if (effectiveNickname) formData.append("new_card_nickname", effectiveNickname);
-    if (opts?.skipDupeCheck) formData.append("skip_dupe_check", "true");
+    // Chat entries skip dedup (no photo to compare against) — same convention as the old /chat page
+    if (opts?.skipDupeCheck || entrySource === "chat") formData.append("skip_dupe_check", "true");
 
     const result = await saveExpenseAction(formData);
 
@@ -194,6 +271,11 @@ export function CaptureClient({
     setExtraction(null);
     setError(null);
     setDuplicateOf(null);
+    // Restore the previous chat draft so the user can edit it
+    if (entrySource === "chat" && lastChatMessage) {
+      setChatMessage(lastChatMessage);
+    }
+    setEntrySource(null);
   }
 
   // Save click — if a new card is being introduced, prompt for biz/personal first
@@ -310,6 +392,72 @@ export function CaptureClient({
             <p className="text-center text-xs text-gray-500">
               {userPlan.scanCount} / {userPlan.scanLimit} scans used this month
               {userPlan.trialActive && " (Pro trial)"}
+            </p>
+          )}
+
+          {/* Or describe it — chat entry */}
+          <div className="flex items-center gap-3 pt-2">
+            <div className="h-px flex-1 bg-gray-200" />
+            <span className="text-xs font-medium uppercase tracking-wider text-gray-400">
+              or describe it
+            </span>
+            <div className="h-px flex-1 bg-gray-200" />
+          </div>
+
+          <form onSubmit={handleChatSubmit} className="space-y-3">
+            <div className="relative">
+              <textarea
+                value={chatMessage + (voice.interim ? (chatMessage.trimEnd() ? " " : "") + voice.interim : "")}
+                onChange={(e) => setChatMessage(e.target.value)}
+                disabled={!hasApiKey || !userPlan.canScan}
+                rows={3}
+                placeholder={voice.listening ? "Listening… speak now" : "Spent $45 on home depot lumber last Tuesday, business…"}
+                className="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 pr-12 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 disabled:opacity-50"
+              />
+              {voice.supported && (
+                <button
+                  type="button"
+                  onClick={() => (voice.listening ? voice.stop() : voice.start())}
+                  disabled={!hasApiKey || !userPlan.canScan}
+                  aria-label={voice.listening ? "Stop voice input" : "Start voice input"}
+                  aria-pressed={voice.listening}
+                  className={
+                    "absolute bottom-2 right-2 flex h-9 w-9 items-center justify-center rounded-full text-white shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-40 " +
+                    (voice.listening
+                      ? "animate-pulse bg-red-600 hover:bg-red-700"
+                      : "bg-indigo-600 hover:bg-indigo-700")
+                  }
+                >
+                  {voice.listening ? <Square className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                </button>
+              )}
+            </div>
+            {voice.error && (
+              <p className="text-xs text-red-600">{voice.error}</p>
+            )}
+            <button
+              type="submit"
+              disabled={!chatMessage.trim() || !hasApiKey || !userPlan.canScan}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Send className="h-4 w-4" />
+              Parse expense
+            </button>
+          </form>
+        </div>
+      )}
+
+      {/* Stage: thinking (chat) */}
+      {stage === "thinking" && (
+        <div className="space-y-4 rounded-2xl border border-gray-200 bg-white p-6">
+          <div className="flex items-center justify-center gap-3">
+            <Loader2 className="h-6 w-6 animate-spin text-indigo-600" />
+            <span className="text-sm font-medium text-gray-700">Parsing your expense…</span>
+          </div>
+          {lastChatMessage && (
+            <p className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-600">
+              <MessageSquare className="mr-1.5 inline h-3 w-3" />
+              {lastChatMessage}
             </p>
           )}
         </div>

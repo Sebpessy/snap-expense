@@ -2,13 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Receipt, Camera, Settings, LayoutDashboard, MessageSquare } from "lucide-react";
+import { Receipt, Camera, Settings, LayoutDashboard } from "lucide-react";
 
 const tabs = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, highlight: false },
   { href: "/expenses", label: "Expenses", icon: Receipt, highlight: false },
   { href: "/capture", label: "Capture", icon: Camera, highlight: true },
-  { href: "/chat", label: "Chat", icon: MessageSquare, highlight: false },
   { href: "/settings", label: "Settings", icon: Settings, highlight: false },
 ] as const;
 
