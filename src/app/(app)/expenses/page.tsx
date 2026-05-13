@@ -37,9 +37,10 @@ export default async function ExpensesPage() {
   );
 
   const userPlan = profileResult.data
-    ? getUserPlan(profileResult.data)
+    ? await getUserPlan(profileResult.data)
     : {
-        plan: "free" as const,
+        plan: "free",
+        planName: "Free",
         trialActive: false,
         trialEndsAt: null,
         scanCount: 0,

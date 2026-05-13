@@ -40,7 +40,7 @@ export async function extractReceiptAction(formData: FormData) {
 
     if (!profile) return { success: false as const, error: "Profile not found" };
 
-    const userPlan = getUserPlan(profile);
+    const userPlan = await getUserPlan(profile);
     if (!userPlan.canScan) {
       return { success: false as const, error: "scan_limit_reached" };
     }

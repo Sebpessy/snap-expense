@@ -36,7 +36,7 @@ export default async function CapturePage() {
   const hasPlatformKey = Boolean(process.env.ANTHROPIC_API_KEY);
   const hasApiKey = (hasUserKey.data ?? false) || hasPlatformKey;
 
-  const userPlan = getUserPlan(
+  const userPlan = await getUserPlan(
     profile ?? {
       plan: "free",
       trial_ends_at: null,

@@ -25,6 +25,7 @@ interface Profile {
 
 interface UsersClientProps {
   initialUsers: Profile[];
+  planOptions: { code: string; name: string }[];
 }
 
 const PLAN_BADGE_COLORS: Record<string, string> = {
@@ -54,7 +55,7 @@ function getUserStatus(user: Profile): {
   return { label: "Free", color: "text-gray-500" };
 }
 
-export function UsersClient({ initialUsers }: UsersClientProps) {
+export function UsersClient({ initialUsers, planOptions }: UsersClientProps) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [sortKey, setSortKey] = useState<SortKey>("created_at");
@@ -364,9 +365,11 @@ export function UsersClient({ initialUsers }: UsersClientProps) {
                                 disabled={isSubmitting}
                                 className="px-2 py-1 text-sm border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-400"
                               >
-                                <option value="free">Free</option>
-                                <option value="pro">Pro</option>
-                                <option value="business">Business</option>
+                                {planOptions.map((p) => (
+                                  <option key={p.code} value={p.code}>
+                                    {p.name}
+                                  </option>
+                                ))}
                               </select>
                               <button
                                 onClick={() => setChangingPlan(null)}

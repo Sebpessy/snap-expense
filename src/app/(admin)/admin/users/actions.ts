@@ -78,11 +78,20 @@ export async function changePlanAction(userId: string, plan: string) {
     return { success: false, error: auth.error };
   }
 
-  if (!["free", "pro", "business"].includes(plan)) {
-    return { success: false, error: "Invalid plan" };
-  }
-
   const supabase = createAdminClient();
+
+  // Validate the plan code exists and is active
+  const { data: planRow, error: planErr } = await supabase
+    .from("plans")
+    .select("code, is_active")
+    .eq("code", plan)
+    .single();
+  if (planErr || !planRow) {
+    return { success: false, error: "Unknown plan" };
+  }
+  if (!planRow.is_active) {
+    return { success: false, error: "Plan is not active" };
+  }
 
   const { error } = await supabase
     .from("profiles")

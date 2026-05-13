@@ -103,13 +103,29 @@ export type CategoryRequest = {
 };
 
 export type UserPlan = {
-  plan: "free" | "pro" | "business";
+  plan: string;
+  planName: string;
   trialActive: boolean;
   trialEndsAt: string | null;
   scanCount: number;
   scanLimit: number | null; // null = unlimited
   canScan: boolean;
   hasApiKey: boolean;
+};
+
+export type Plan = {
+  id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  monthly_price_cents: number | null;
+  scans_per_month: number | null;
+  history_days: number | null;
+  is_active: boolean;
+  sort_order: number;
+  stripe_price_id: string | null;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export function formatCents(

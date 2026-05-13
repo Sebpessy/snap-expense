@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { formatCents } from "@/lib/types";
-import { PLAN_PRICES } from "@/lib/plans";
+import { getPlansByCode } from "@/lib/plans";
 import { Chart } from "@/components/ui/chart";
 
 export default async function AdminDashboardPage() {
@@ -19,6 +19,13 @@ export default async function AdminDashboardPage() {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
   const thirtyDaysAgoISO = thirtyDaysAgo.toISOString();
+
+  // Plans first so we know which codes count as "paying"
+  const plansByCode = await getPlansByCode();
+  const paidPlanCodes = Object.values(plansByCode)
+    .filter((p) => (p.monthly_price_cents ?? 0) > 0)
+    .map((p) => p.code);
+  const freePlanCode = "free";
 
   // Fetch all stats in parallel
   const [
@@ -35,16 +42,18 @@ export default async function AdminDashboardPage() {
     supabase
       .from("profiles")
       .select("*", { count: "exact", head: true }),
-    // Paying users
+    // Paying users — anyone on a plan with a positive price
+    paidPlanCodes.length > 0
+      ? supabase
+          .from("profiles")
+          .select("*", { count: "exact", head: true })
+          .in("plan", paidPlanCodes)
+      : Promise.resolve({ count: 0 }),
+    // Trial users — on the free plan with trial not yet expired
     supabase
       .from("profiles")
       .select("*", { count: "exact", head: true })
-      .in("plan", ["pro", "business"]),
-    // Trial users
-    supabase
-      .from("profiles")
-      .select("*", { count: "exact", head: true })
-      .eq("plan", "free")
+      .eq("plan", freePlanCode)
       .gt("trial_ends_at", new Date().toISOString()),
     // Active subscriptions for MRR
     supabase
@@ -76,11 +85,11 @@ export default async function AdminDashboardPage() {
       .limit(10),
   ]);
 
-  // Calculate MRR
+  // Calculate MRR using prices from the plans table
   const mrr = (activeSubscriptions ?? []).reduce((sum, sub) => {
-    if (sub.plan === "pro") return sum + PLAN_PRICES.pro.monthly;
-    if (sub.plan === "business") return sum + PLAN_PRICES.business.monthly * (sub.quantity ?? 1);
-    return sum;
+    const plan = plansByCode[sub.plan as string];
+    const price = plan?.monthly_price_cents ?? 0;
+    return sum + price * (sub.quantity ?? 1);
   }, 0);
 
   // Calculate churn rate

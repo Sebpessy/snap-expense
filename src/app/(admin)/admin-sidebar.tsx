@@ -12,11 +12,13 @@ import {
   Menu,
   X,
   Tag,
+  Layers,
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/users", label: "Users", icon: Users },
+  { href: "/admin/plans", label: "Plans", icon: Layers },
   { href: "/admin/subscriptions", label: "Subscriptions", icon: CreditCard },
   { href: "/admin/webhooks", label: "Webhooks", icon: Webhook },
   { href: "/admin/category-requests", label: "Category Requests", icon: Tag },

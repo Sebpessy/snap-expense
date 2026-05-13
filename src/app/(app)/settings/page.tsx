@@ -21,9 +21,10 @@ export default async function SettingsPage() {
     .single();
 
   const userPlan = profile
-    ? getUserPlan(profile)
+    ? await getUserPlan(profile)
     : {
-        plan: "free" as const,
+        plan: "free",
+        planName: "Free",
         trialActive: false,
         trialEndsAt: null,
         scanCount: 0,
