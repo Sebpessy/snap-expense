@@ -1,7 +1,7 @@
 {
   "name": "Snap Expense",
   "short_name": "SnapExpense",
-  "start_url": "/expenses",
+  "start_url": "/capture",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#2563eb",

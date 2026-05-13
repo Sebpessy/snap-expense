@@ -30,7 +30,7 @@ export function LoginClient() {
       return;
     }
 
-    router.push("/expenses");
+    router.push("/capture");
     router.refresh();
   };
 

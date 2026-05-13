@@ -90,7 +90,7 @@ export function AdminSidebar() {
 
         <div className="px-3 py-4 border-t border-gray-800">
           <Link
-            href="/expenses"
+            href="/capture"
             className="flex items-center gap-2 px-3 py-2.5 text-sm text-gray-400 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />

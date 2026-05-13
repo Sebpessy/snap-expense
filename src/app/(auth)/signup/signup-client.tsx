@@ -34,7 +34,7 @@ export function SignupClient() {
 
     // If email confirmation is required, the session will be null
     if (data.session) {
-      router.push("/expenses");
+      router.push("/capture");
       router.refresh();
     } else {
       setInfo("Check your email to confirm your account.");

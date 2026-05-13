@@ -45,7 +45,7 @@ export function ResetPasswordClient() {
       return;
     }
 
-    router.push("/expenses");
+    router.push("/capture");
     router.refresh();
   };
 

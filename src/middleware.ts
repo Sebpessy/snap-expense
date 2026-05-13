@@ -63,10 +63,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Authenticated and on auth page → redirect to expenses
+  // Authenticated and on auth page → redirect to the default landing (capture)
   if (user && isAuthPage) {
     const url = request.nextUrl.clone();
-    url.pathname = "/expenses";
+    url.pathname = "/capture";
     return NextResponse.redirect(url);
   }
 
