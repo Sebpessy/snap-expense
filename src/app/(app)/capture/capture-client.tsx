@@ -9,7 +9,6 @@ import {
   AlertTriangle,
   Check,
   ArrowLeft,
-  Copy,
   Mic,
   Square,
   Send,
@@ -23,21 +22,16 @@ import { getCategory } from "@/lib/categories";
 import { useVoiceInput } from "@/lib/use-voice-input";
 import {
   formatCents,
-  formatDate,
   type UserPlan,
   type ExtractionResult,
   type PaymentMethod,
   type PaymentCard,
   type Sub,
 } from "@/lib/types";
-import { extractReceiptAction, saveExpenseAction } from "./actions";
-
-type DuplicateOf = {
-  id: string;
-  merchant: string | null;
-  expense_date: string | null;
-  amount_cents: number | null;
-};
+import { createClient } from "@/lib/supabase/client";
+import { expenseQueue, type ExpenseDraft } from "@/lib/expense-queue";
+import { resizeImageForUpload } from "@/lib/resize-image";
+import { extractReceiptAction } from "./actions";
 
 type Stage = "idle" | "extracting" | "thinking" | "review" | "saving";
 
@@ -57,13 +51,18 @@ export function CaptureClient({
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Background receipt upload state — populated as soon as extraction succeeds.
+  // By the time the user clicks Log Expense, the receipt is usually already in
+  // Supabase Storage and the commit becomes a tiny DB-only request.
+  const resizedBlobRef = useRef<Blob | null>(null);
+  const receiptPathRef = useRef<string | null>(null);
+
   const [stage, setStage] = useState<Stage>("idle");
   const [entrySource, setEntrySource] = useState<EntrySource>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [extraction, setExtraction] = useState<ExtractionResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [duplicateOf, setDuplicateOf] = useState<DuplicateOf | null>(null);
 
   // Chat-style entry
   const [chatMessage, setChatMessage] = useState("");
@@ -110,11 +109,38 @@ export function CaptureClient({
     setImagePreviewUrl(URL.createObjectURL(file));
     setEntrySource("photo");
     setError(null);
+    resizedBlobRef.current = null;
+    receiptPathRef.current = null;
     // Reset the input so picking the SAME file again still triggers onChange
     e.target.value = "";
     // Fire extraction immediately — no need for the user to tap "Analyze"
     if (hasApiKey && userPlan.canScan) {
       handleExtract(file);
+    }
+  }
+
+  // Resize the receipt and start uploading it to Supabase Storage in the
+  // background while the user reviews the extracted fields. If they click
+  // Log Expense before this finishes, the queue worker will pick it up.
+  async function startBackgroundReceiptUpload(file: File) {
+    try {
+      const resized = await resizeImageForUpload(file);
+      resizedBlobRef.current = resized;
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+      const path = `${user.id}/${Date.now()}-${crypto.randomUUID()}.jpg`;
+      const { error } = await supabase.storage
+        .from("receipts")
+        .upload(path, resized, {
+          contentType: "image/jpeg",
+          upsert: false,
+        });
+      if (!error) receiptPathRef.current = path;
+    } catch {
+      // Swallow — the queue worker will retry the upload at save time.
     }
   }
 
@@ -212,6 +238,8 @@ export function CaptureClient({
       setCardId(null);
     }
     setStage("review");
+    // Kick off the background upload now that extraction succeeded.
+    void startBackgroundReceiptUpload(file);
   }
 
   async function handleSave(opts?: {
@@ -222,45 +250,41 @@ export function CaptureClient({
     if (entrySource === "photo" && !imageFile) return;
     setStage("saving");
     setError(null);
-    setDuplicateOf(null);
 
-    const formData = new FormData();
-    if (imageFile) formData.append("image", imageFile);
-    formData.append("merchant", merchant);
-    formData.append(
-      "amount_cents",
-      amount ? String(Math.round(parseFloat(amount) * 100)) : "",
-    );
-    formData.append("expense_date", expenseDate);
-    formData.append("category_code", categoryCode);
-    formData.append("business_purpose", businessPurpose);
-    formData.append("is_business", isBusiness ? "true" : "false");
-    formData.append("raw_extraction", JSON.stringify(extraction));
-    if (paymentMethod) formData.append("payment_method", paymentMethod);
-    if (cardLast4) formData.append("card_last4", cardLast4);
-    if (cardId) formData.append("card_id", cardId);
-    if (checkNumber) formData.append("check_number", checkNumber);
-    if (referenceNumber) formData.append("reference_number", referenceNumber);
-    if (subId) formData.append("sub_id", subId);
     const effectiveIsBusiness = opts?.newCard?.isBusiness ?? newCardIsBusiness;
     const effectiveNickname = opts?.newCard?.nickname ?? newCardNickname;
-    formData.append("new_card_is_business", effectiveIsBusiness ? "true" : "false");
-    if (effectiveNickname) formData.append("new_card_nickname", effectiveNickname);
-    // Chat entries skip dedup (no photo to compare against) — same convention as the old /chat page
-    if (opts?.skipDupeCheck || entrySource === "chat") formData.append("skip_dupe_check", "true");
 
-    const result = await saveExpenseAction(formData);
+    const draft: ExpenseDraft = {
+      merchant,
+      amount_cents: amount ? Math.round(parseFloat(amount) * 100) : null,
+      expense_date: expenseDate || null,
+      category_code: categoryCode,
+      business_purpose: businessPurpose || null,
+      is_business: isBusiness,
+      payment_method: paymentMethod,
+      card_last4: cardLast4,
+      card_id: cardId,
+      check_number: checkNumber || null,
+      reference_number: referenceNumber || null,
+      sub_id: subId,
+      new_card_is_business: effectiveIsBusiness,
+      new_card_nickname: effectiveNickname || null,
+      // Chat entries skip dedup (no photo to compare against) — same convention as the old /chat page
+      skip_dupe_check: !!opts?.skipDupeCheck || entrySource === "chat",
+      raw_extraction: extraction,
+    };
 
-    if (!result.success) {
-      if (result.error === "duplicate" && "duplicateOf" in result && result.duplicateOf) {
-        setDuplicateOf(result.duplicateOf as DuplicateOf);
-        setStage("review");
-        return;
-      }
-      setError(result.error ?? "Failed to save expense");
-      setStage("review");
-      return;
-    }
+    // Prefer the already-uploaded receipt path; otherwise queue the (resized)
+    // blob and let the worker upload it. Either way, the user navigates away
+    // immediately — no spinner that can hang forever.
+    const path = receiptPathRef.current;
+    const blob =
+      path || entrySource === "chat"
+        ? null
+        : resizedBlobRef.current ??
+          (imageFile ? await resizeImageForUpload(imageFile) : null);
+
+    await expenseQueue.enqueue(draft, blob, path);
 
     router.push("/expenses");
     router.refresh();
@@ -270,7 +294,8 @@ export function CaptureClient({
     setStage("idle");
     setExtraction(null);
     setError(null);
-    setDuplicateOf(null);
+    resizedBlobRef.current = null;
+    receiptPathRef.current = null;
     // Restore the previous chat draft so the user can edit it
     if (entrySource === "chat" && lastChatMessage) {
       setChatMessage(lastChatMessage);
@@ -497,40 +522,6 @@ export function CaptureClient({
             <ArrowLeft className="h-4 w-4" />
             Back
           </button>
-
-          {/* Duplicate warning */}
-          {duplicateOf && (
-            <div className="rounded-xl border border-amber-300 bg-amber-50 p-4">
-              <div className="flex items-start gap-2">
-                <Copy className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
-                <div className="flex-1 space-y-2">
-                  <p className="text-sm font-medium text-amber-900">
-                    Possible duplicate
-                  </p>
-                  <p className="text-sm text-amber-800">
-                    {duplicateOf.merchant || "Unknown"} ·{" "}
-                    {formatCents(duplicateOf.amount_cents)} ·{" "}
-                    {formatDate(duplicateOf.expense_date)}
-                  </p>
-                  <div className="flex gap-2 pt-1">
-                    <Link
-                      href={`/expense/${duplicateOf.id}`}
-                      className="rounded-lg border border-amber-300 bg-white px-3 py-1.5 text-xs font-medium text-amber-900 hover:bg-amber-100"
-                    >
-                      View existing
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => handleSaveClick({ skipDupeCheck: true })}
-                      className="rounded-lg bg-amber-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-amber-700"
-                    >
-                      Save anyway
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Receipt thumbnail */}
           {imagePreviewUrl && (
