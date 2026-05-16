@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getUserPlan } from "@/lib/plans";
 import { extractReceiptWithUserKey } from "@/lib/extract";
 import { canonicalizeMerchant } from "@/lib/merchant-aliases";
-import type { ExtractionResult } from "@/lib/types";
+import type { ExtractionResult, PaymentMethod } from "@/lib/types";
 
 export async function extractReceiptAction(formData: FormData) {
   try {
@@ -40,7 +40,7 @@ export async function extractReceiptAction(formData: FormData) {
 
     if (!profile) return { success: false as const, error: "Profile not found" };
 
-    const userPlan = await getUserPlan(profile);
+    const userPlan = await getUserPlan(profile, user.id);
     if (!userPlan.canScan) {
       return { success: false as const, error: "scan_limit_reached" };
     }
@@ -52,11 +52,11 @@ export async function extractReceiptAction(formData: FormData) {
       mimeType: "image/jpeg",
     });
 
-    // Increment scan count
+    // Increment scan count (userPlan.scanCount reflects any period rollover)
     await supabase
       .from("profiles")
       .update({
-        scan_count_this_period: (profile.scan_count_this_period ?? 0) + 1,
+        scan_count_this_period: userPlan.scanCount + 1,
       })
       .eq("id", user.id);
 
@@ -72,7 +72,27 @@ export async function extractReceiptAction(formData: FormData) {
   }
 }
 
-export async function saveExpenseAction(formData: FormData) {
+type CommitInput = {
+  merchant: string;
+  amount_cents: number | null;
+  expense_date: string | null;
+  category_code: string;
+  business_purpose: string | null;
+  is_business: boolean;
+  payment_method: PaymentMethod | null;
+  card_last4: string | null;
+  card_id: string | null;
+  check_number: string | null;
+  reference_number: string | null;
+  sub_id: string | null;
+  new_card_is_business: boolean;
+  new_card_nickname: string | null;
+  skip_dupe_check: boolean;
+  raw_extraction: ExtractionResult | null;
+  receipt_path: string | null;
+};
+
+export async function commitExpenseAction(input: CommitInput) {
   try {
     const supabase = await createClient();
     const {
@@ -80,62 +100,40 @@ export async function saveExpenseAction(formData: FormData) {
     } = await supabase.auth.getUser();
     if (!user) return { success: false as const, error: "Not authenticated" };
 
-    // Upload image to Supabase Storage
-    const imageFile = formData.get("image") as File | null;
-    let receiptPath: string | null = null;
-
-    if (imageFile) {
-      const arrayBuffer = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const resized = await sharp(buffer)
-        .resize({ width: 1600, withoutEnlargement: true })
-        .jpeg({ quality: 70 })
-        .toBuffer();
-
-      const timestamp = Date.now();
-      const storagePath = `${user.id}/${timestamp}-receipt.jpg`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("receipts")
-        .upload(storagePath, resized, {
-          contentType: "image/jpeg",
-          upsert: false,
-        });
-
-      if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
-      receiptPath = storagePath;
-    }
-
-    // Parse form fields
-    const rawMerchant = formData.get("merchant") as string | null;
-    // Apply user-defined merchant alias rules (e.g. "STARBUCKS #4321" → "Starbucks")
-    const merchant = rawMerchant ? await canonicalizeMerchant(user.id, rawMerchant) : null;
-    const amountCentsRaw = formData.get("amount_cents") as string | null;
-    const amountCents =
-      amountCentsRaw && amountCentsRaw !== ""
-        ? parseInt(amountCentsRaw, 10)
-        : null;
-    const expenseDate = (formData.get("expense_date") as string) || null;
-    const categoryCode = (formData.get("category_code") as string) || "other";
-    const businessPurpose =
-      (formData.get("business_purpose") as string) || null;
-    const isBusiness = formData.get("is_business") === "true";
-    const skipDupeCheck = formData.get("skip_dupe_check") === "true";
-
-    // Payment fields
-    const paymentMethodRaw = (formData.get("payment_method") as string | null) ?? null;
-    const ALLOWED_METHODS = ["credit_card","check","zelle","wire","cash","other"];
-    const paymentMethod = paymentMethodRaw && ALLOWED_METHODS.includes(paymentMethodRaw)
-      ? paymentMethodRaw
+    const rawMerchant = input.merchant || null;
+    const merchant = rawMerchant
+      ? await canonicalizeMerchant(user.id, rawMerchant)
       : null;
-    const cardLast4Raw = (formData.get("card_last4") as string | null) ?? null;
-    const cardLast4 = cardLast4Raw && /^\d{4}$/.test(cardLast4Raw) ? cardLast4Raw : null;
-    let cardId = (formData.get("card_id") as string | null) || null;
-    const newCardIsBusiness = formData.get("new_card_is_business") === "true";
-    const newCardNickname = (formData.get("new_card_nickname") as string | null) || null;
-    const checkNumber = (formData.get("check_number") as string | null) || null;
-    const referenceNumber = (formData.get("reference_number") as string | null) || null;
-    let subId = (formData.get("sub_id") as string | null) || null;
+    const amountCents = input.amount_cents;
+    const expenseDate = input.expense_date || null;
+    const categoryCode = input.category_code || "other";
+    const businessPurpose = input.business_purpose || null;
+    const isBusiness = !!input.is_business;
+    const skipDupeCheck = !!input.skip_dupe_check;
+
+    const ALLOWED_METHODS: PaymentMethod[] = [
+      "credit_card",
+      "check",
+      "zelle",
+      "wire",
+      "cash",
+      "other",
+    ];
+    const paymentMethod =
+      input.payment_method && ALLOWED_METHODS.includes(input.payment_method)
+        ? input.payment_method
+        : null;
+    const cardLast4 =
+      input.card_last4 && /^\d{4}$/.test(input.card_last4)
+        ? input.card_last4
+        : null;
+    let cardId = input.card_id || null;
+    const newCardIsBusiness = !!input.new_card_is_business;
+    const newCardNickname = input.new_card_nickname || null;
+    const checkNumber = input.check_number || null;
+    const referenceNumber = input.reference_number || null;
+    let subId = input.sub_id || null;
+    const receiptPath = input.receipt_path || null;
 
     // Auto-link sub via alias / canonical name if user didn't pick one
     if (!subId && merchant) {
@@ -146,15 +144,7 @@ export async function saveExpenseAction(formData: FormData) {
       if (resolved) subId = resolved as string;
     }
 
-    let rawExtraction: ExtractionResult | null = null;
-    const rawJson = formData.get("raw_extraction") as string | null;
-    if (rawJson) {
-      try {
-        rawExtraction = JSON.parse(rawJson);
-      } catch {
-        // Ignore parse errors for raw extraction
-      }
-    }
+    const rawExtraction = input.raw_extraction;
 
     // Dedup check: same merchant + date + amount in past 7 days
     if (!skipDupeCheck && merchant && expenseDate && amountCents != null) {

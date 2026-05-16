@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Plus, Search, RefreshCw, Camera, Download, SlidersHorizontal } from "lucide-react";
 import { ExpenseCard } from "@/components/expense-card";
+import { PendingExpenseCard } from "@/components/pending-expense-card";
 import { UpgradeBanner } from "@/components/upgrade-banner";
+import { useExpenseQueue } from "@/lib/use-expense-queue";
 import { type Expense, type UserPlan, formatCents } from "@/lib/types";
 
 type ExpensesClientProps = {
@@ -24,6 +26,17 @@ export function ExpensesClient({
   const [showFilters, setShowFilters] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const { pending } = useExpenseQueue();
+
+  // When a queued expense disappears (= it committed to the DB), refresh the
+  // server-rendered list so the newly inserted row shows up.
+  const prevPendingCountRef = useRef(pending.length);
+  useEffect(() => {
+    if (pending.length < prevPendingCountRef.current) {
+      router.refresh();
+    }
+    prevPendingCountRef.current = pending.length;
+  }, [pending.length, router]);
 
   const exportUrl = (() => {
     const params = new URLSearchParams();
@@ -163,6 +176,15 @@ export function ExpensesClient({
         </div>
       )}
 
+      {/* Pending (offline / syncing) expenses — shown at the top */}
+      {pending.length > 0 && (
+        <div className="mb-2 space-y-2">
+          {pending.map((item) => (
+            <PendingExpenseCard key={item.local_id} item={item} />
+          ))}
+        </div>
+      )}
+
       {/* Expense list */}
       {filtered.length > 0 ? (
         <div className="space-y-2">
@@ -180,7 +202,7 @@ export function ExpensesClient({
             No expenses match &ldquo;{searchQuery}&rdquo;
           </p>
         </div>
-      ) : (
+      ) : pending.length > 0 ? null : (
         <div className="py-20 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
             <Camera className="h-8 w-8 text-gray-400" />
