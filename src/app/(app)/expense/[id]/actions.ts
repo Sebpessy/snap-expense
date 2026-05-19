@@ -45,6 +45,7 @@ export async function updateExpenseAction(id: string, formData: FormData) {
     const checkNumber = (formData.get("check_number") as string) || null;
     const referenceNumber = (formData.get("reference_number") as string) || null;
     const subId = (formData.get("sub_id") as string) || null;
+    const projectId = (formData.get("project_id") as string) || null;
 
     if (paymentMethod === "credit_card" && cardLast4 && !cardId) {
       const { data: existing } = await supabase
@@ -95,6 +96,7 @@ export async function updateExpenseAction(id: string, formData: FormData) {
             ? referenceNumber
             : null,
         sub_id: subId,
+        project_id: projectId,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id)

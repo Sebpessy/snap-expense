@@ -17,6 +17,29 @@ export async function POST(req: NextRequest) {
 
   const supabase = createAdminClient();
 
+  // Stripe API 2025-03-31.preview moved current_period_* from the Subscription
+  // root onto each SubscriptionItem. Read item-first, fall back to root so the
+  // handler works against both the SDK's pinned apiVersion and live webhooks.
+  const readPeriod = (sub: {
+    current_period_start?: number | null;
+    current_period_end?: number | null;
+    items: {
+      data: Array<{
+        current_period_start?: number | null;
+        current_period_end?: number | null;
+      }>;
+    };
+  }) => {
+    const item = sub.items.data[0];
+    return {
+      start: item?.current_period_start ?? sub.current_period_start ?? null,
+      end: item?.current_period_end ?? sub.current_period_end ?? null,
+    };
+  };
+
+  const toIso = (unixSeconds: number | null) =>
+    unixSeconds != null ? new Date(unixSeconds * 1000).toISOString() : null;
+
   // Log the event
   await supabase.from("webhook_events").upsert(
     {
@@ -24,6 +47,7 @@ export async function POST(req: NextRequest) {
       event_type: event.type,
       payload: event.data.object as unknown as Record<string, unknown>,
       processed: true,
+      error_message: null,
       processed_at: new Date().toISOString(),
     },
     { onConflict: "stripe_event_id" }
@@ -51,7 +75,8 @@ export async function POST(req: NextRequest) {
           const sub = await stripe.subscriptions.retrieve(subscriptionId);
           const priceId = sub.items.data[0]?.price.id;
           const plan =
-            priceId === process.env.STRIPE_PRO_PRICE_ID ? "pro" : "business";
+            priceId === process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID ? "pro" : "business";
+          const period = readPeriod(sub as unknown as Parameters<typeof readPeriod>[0]);
 
           // Create subscription record
           await supabase.from("subscriptions").upsert(
@@ -62,12 +87,8 @@ export async function POST(req: NextRequest) {
               status: sub.status,
               plan,
               quantity: sub.items.data[0]?.quantity ?? 1,
-              current_period_start: new Date(
-                sub.current_period_start * 1000
-              ).toISOString(),
-              current_period_end: new Date(
-                sub.current_period_end * 1000
-              ).toISOString(),
+              current_period_start: toIso(period.start),
+              current_period_end: toIso(period.end),
               cancel_at_period_end: sub.cancel_at_period_end,
             },
             { onConflict: "stripe_subscription_id" }
@@ -86,14 +107,22 @@ export async function POST(req: NextRequest) {
         const sub = event.data.object as {
           id: string;
           status: string;
-          items: { data: Array<{ price: { id: string }; quantity: number }> };
-          current_period_start: number;
-          current_period_end: number;
+          items: {
+            data: Array<{
+              price: { id: string };
+              quantity: number;
+              current_period_start?: number | null;
+              current_period_end?: number | null;
+            }>;
+          };
+          current_period_start?: number | null;
+          current_period_end?: number | null;
           cancel_at_period_end: boolean;
         };
         const priceId = sub.items.data[0]?.price.id;
         const plan =
-          priceId === process.env.STRIPE_PRO_PRICE_ID ? "pro" : "business";
+          priceId === process.env.NEXT_PUBLIC_STRIPE_PRO_PRICE_ID ? "pro" : "business";
+        const period = readPeriod(sub);
 
         await supabase
           .from("subscriptions")
@@ -102,12 +131,8 @@ export async function POST(req: NextRequest) {
             plan,
             stripe_price_id: priceId,
             quantity: sub.items.data[0]?.quantity ?? 1,
-            current_period_start: new Date(
-              sub.current_period_start * 1000
-            ).toISOString(),
-            current_period_end: new Date(
-              sub.current_period_end * 1000
-            ).toISOString(),
+            current_period_start: toIso(period.start),
+            current_period_end: toIso(period.end),
             cancel_at_period_end: sub.cancel_at_period_end,
           })
           .eq("stripe_subscription_id", sub.id);

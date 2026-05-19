@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { type Expense, type PaymentCard, type Sub } from "@/lib/types";
+import { type Expense, type PaymentCard, type Project, type Sub } from "@/lib/types";
 import { signReceiptUrl } from "@/lib/signed-url";
 import { ExpenseDetailClient } from "./expense-detail-client";
 
@@ -18,7 +18,7 @@ export default async function ExpenseDetailPage({ params }: Props) {
 
   if (!user) redirect("/login");
 
-  const [{ data: expense }, { data: cards }, { data: subs }] = await Promise.all([
+  const [{ data: expense }, { data: cards }, { data: subs }, { data: projects }] = await Promise.all([
     supabase
       .from("expenses")
       .select("*")
@@ -36,6 +36,11 @@ export default async function ExpenseDetailPage({ params }: Props) {
       .eq("user_id", user.id)
       .neq("status", "blacklisted")
       .order("name"),
+    supabase
+      .from("projects")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("name"),
   ]);
 
   if (!expense) redirect("/expenses");
@@ -48,6 +53,7 @@ export default async function ExpenseDetailPage({ params }: Props) {
       receiptUrl={receiptUrl}
       existingCards={(cards ?? []) as PaymentCard[]}
       existingSubs={(subs ?? []) as Sub[]}
+      existingProjects={(projects ?? []) as Project[]}
     />
   );
 }

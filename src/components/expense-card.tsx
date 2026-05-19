@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronRight, Receipt as ReceiptIcon } from "lucide-react";
+import { Building2, ChevronRight, Receipt as ReceiptIcon } from "lucide-react";
 import { type Expense, formatCents, formatDate } from "@/lib/types";
 import { getCategory } from "@/lib/categories";
 import { Lightbox } from "@/components/ui/lightbox";
@@ -10,9 +10,10 @@ import { Lightbox } from "@/components/ui/lightbox";
 type ExpenseCardProps = {
   expense: Expense;
   thumbUrl?: string | null;
+  projectName?: string;
 };
 
-export function ExpenseCard({ expense, thumbUrl }: ExpenseCardProps) {
+export function ExpenseCard({ expense, thumbUrl, projectName }: ExpenseCardProps) {
   const category = getCategory(expense.category_code);
   const isPersonal = !expense.is_business;
   const lowConfidence =
@@ -80,6 +81,12 @@ export function ExpenseCard({ expense, thumbUrl }: ExpenseCardProps) {
                 )}
               </p>
             </div>
+            {projectName && (
+              <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-indigo-600">
+                <Building2 className="h-2.5 w-2.5" />
+                <span className="truncate">{projectName}</span>
+              </p>
+            )}
           </div>
 
           <div className="flex shrink-0 items-center gap-1">

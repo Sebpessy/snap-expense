@@ -5,7 +5,10 @@ let _stripe: Stripe | null = null;
 export function getStripe(): Stripe {
   if (!_stripe) {
     _stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2025-02-24.acacia",
+      // stripe-node v17's types only know "2025-02-24.acacia", but the account
+      // default is "2026-04-22.dahlia" — pin to that so SDK responses match
+      // what live webhook events carry (notably current_period_* on items).
+      apiVersion: "2026-04-22.dahlia" as Stripe.LatestApiVersion,
     });
   }
   return _stripe;

@@ -14,12 +14,14 @@ type ExpensesClientProps = {
   expenses: Expense[];
   userPlan: UserPlan;
   thumbUrls?: Record<string, string | null>;
+  projectNamesById?: Record<string, string>;
 };
 
 export function ExpensesClient({
   expenses,
   userPlan,
   thumbUrls,
+  projectNamesById,
 }: ExpensesClientProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -193,6 +195,9 @@ export function ExpensesClient({
               key={expense.id}
               expense={expense}
               thumbUrl={thumbUrls?.[expense.id]}
+              projectName={
+                expense.project_id ? projectNamesById?.[expense.project_id] : undefined
+              }
             />
           ))}
         </div>

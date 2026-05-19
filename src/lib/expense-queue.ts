@@ -17,6 +17,7 @@ export type ExpenseDraft = {
   check_number: string | null;
   reference_number: string | null;
   sub_id: string | null;
+  project_id: string | null;
   new_card_is_business: boolean;
   new_card_nickname: string | null;
   skip_dupe_check: boolean;

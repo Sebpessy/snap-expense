@@ -10,12 +10,14 @@ import { CategoryPicker } from "@/components/category-picker";
 import { PaymentMethodPicker } from "@/components/payment-method-picker";
 import { NewCardModal } from "@/components/new-card-modal";
 import { SubPicker } from "@/components/sub-picker";
+import { ProjectPicker } from "@/components/project-picker";
 import { Lightbox } from "@/components/ui/lightbox";
 import {
   type Expense,
   type PaymentMethod,
   type PaymentCard,
   type Sub,
+  type Project,
   formatCents,
 } from "@/lib/types";
 import { updateExpenseAction, deleteExpenseAction } from "./actions";
@@ -25,6 +27,7 @@ type ExpenseDetailClientProps = {
   receiptUrl: string | null;
   existingCards: PaymentCard[];
   existingSubs: Sub[];
+  existingProjects: Project[];
 };
 
 export function ExpenseDetailClient({
@@ -32,6 +35,7 @@ export function ExpenseDetailClient({
   receiptUrl,
   existingCards,
   existingSubs,
+  existingProjects,
 }: ExpenseDetailClientProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -67,6 +71,9 @@ export function ExpenseDetailClient({
   const [subId, setSubId] = useState<string | null>(expense.sub_id);
   const [localSubs, setLocalSubs] = useState<Sub[]>([]);
   const allSubs = [...existingSubs, ...localSubs];
+  const [projectId, setProjectId] = useState<string | null>(expense.project_id);
+  const [localProjects, setLocalProjects] = useState<Project[]>([]);
+  const allProjects = [...existingProjects, ...localProjects];
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -109,6 +116,8 @@ export function ExpenseDetailClient({
     if (referenceNumber) formData.set("reference_number", referenceNumber);
     if (subId) formData.set("sub_id", subId);
     else formData.set("sub_id", "");
+    if (projectId) formData.set("project_id", projectId);
+    else formData.set("project_id", "");
     const effectiveIsBusiness = opts?.newCard?.isBusiness ?? newCardIsBusiness;
     const effectiveNickname = opts?.newCard?.nickname ?? newCardNickname;
     formData.set("new_card_is_business", effectiveIsBusiness ? "true" : "false");
@@ -319,6 +328,16 @@ export function ExpenseDetailClient({
             subs={allSubs}
             onSubCreated={(s) => setLocalSubs((prev) => [...prev, s])}
             highlight={categoryCode === "contract_labor"}
+          />
+        </div>
+
+        {/* Project linkage */}
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
+          <ProjectPicker
+            projectId={projectId}
+            onChange={setProjectId}
+            projects={allProjects}
+            onProjectCreated={(p) => setLocalProjects((prev) => [...prev, p])}
           />
         </div>
 

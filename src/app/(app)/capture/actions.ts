@@ -85,6 +85,7 @@ type CommitInput = {
   check_number: string | null;
   reference_number: string | null;
   sub_id: string | null;
+  project_id: string | null;
   new_card_is_business: boolean;
   new_card_nickname: string | null;
   skip_dupe_check: boolean;
@@ -133,6 +134,7 @@ export async function commitExpenseAction(input: CommitInput) {
     const checkNumber = input.check_number || null;
     const referenceNumber = input.reference_number || null;
     let subId = input.sub_id || null;
+    const projectId = input.project_id || null;
     const receiptPath = input.receipt_path || null;
 
     // Auto-link sub via alias / canonical name if user didn't pick one
@@ -223,6 +225,7 @@ export async function commitExpenseAction(input: CommitInput) {
             ? referenceNumber
             : null,
         sub_id: subId,
+        project_id: projectId,
       })
       .select("id")
       .single();

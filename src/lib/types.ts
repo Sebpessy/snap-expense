@@ -26,6 +26,24 @@ export type Expense = {
   check_number: string | null;
   reference_number: string | null;
   sub_id: string | null;
+  project_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ProjectStatus = "active" | "completed" | "archived";
+
+export type Project = {
+  id: string;
+  user_id: string;
+  name: string;
+  client_name: string | null;
+  formatted_address: string | null;
+  place_id: string | null;
+  lat: number | null;
+  lng: number | null;
+  notes: string | null;
+  status: ProjectStatus;
   created_at: string;
   updated_at: string;
 };

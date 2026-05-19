@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Hammer,
   Tag,
+  Building2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -201,6 +202,23 @@ export function SettingsClient({
         <ChevronRight className="h-4 w-4 text-gray-300" />
       </Link>
 
+      {/* Projects link */}
+      <Link
+        href="/settings/projects"
+        className="mb-3 flex items-center justify-between rounded-xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+      >
+        <div className="flex items-center gap-3">
+          <Building2 className="h-4 w-4 text-gray-400" />
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Projects</p>
+            <p className="text-xs text-gray-500">
+              Job sites &amp; client projects — allocate every receipt
+            </p>
+          </div>
+        </div>
+        <ChevronRight className="h-4 w-4 text-gray-300" />
+      </Link>
+
       {/* Merchant aliases link */}
       <Link
         href="/settings/aliases"
@@ -305,7 +323,7 @@ export function SettingsClient({
           </h2>
         </div>
 
-        {userPlan.plan === "free" && !userPlan.trialActive ? (
+        {userPlan.plan === "free" ? (
           <div className="space-y-3">
             <button
               onClick={() =>

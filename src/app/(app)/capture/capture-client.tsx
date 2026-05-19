@@ -18,6 +18,7 @@ import { CategoryPicker } from "@/components/category-picker";
 import { PaymentMethodPicker } from "@/components/payment-method-picker";
 import { NewCardModal } from "@/components/new-card-modal";
 import { SubPicker } from "@/components/sub-picker";
+import { ProjectPicker } from "@/components/project-picker";
 import { getCategory } from "@/lib/categories";
 import { useVoiceInput } from "@/lib/use-voice-input";
 import {
@@ -27,6 +28,7 @@ import {
   type PaymentMethod,
   type PaymentCard,
   type Sub,
+  type Project,
 } from "@/lib/types";
 import { createClient } from "@/lib/supabase/client";
 import { expenseQueue, type ExpenseDraft } from "@/lib/expense-queue";
@@ -42,11 +44,15 @@ export function CaptureClient({
   userPlan,
   existingCards,
   existingSubs,
+  existingProjects,
+  projectRecencyDays,
 }: {
   hasApiKey: boolean;
   userPlan: UserPlan;
   existingCards: PaymentCard[];
   existingSubs: Sub[];
+  existingProjects: Project[];
+  projectRecencyDays: Record<string, number>;
 }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -101,6 +107,11 @@ export function CaptureClient({
   // Local-only optimistic subs (newly created via picker) so they appear immediately
   const [localSubs, setLocalSubs] = useState<Sub[]>([]);
   const allSubs = [...existingSubs, ...localSubs];
+
+  // Project linkage (same pattern as subs)
+  const [projectId, setProjectId] = useState<string | null>(null);
+  const [localProjects, setLocalProjects] = useState<Project[]>([]);
+  const allProjects = [...existingProjects, ...localProjects];
 
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -267,6 +278,7 @@ export function CaptureClient({
       check_number: checkNumber || null,
       reference_number: referenceNumber || null,
       sub_id: subId,
+      project_id: projectId,
       new_card_is_business: effectiveIsBusiness,
       new_card_nickname: effectiveNickname || null,
       // Chat entries skip dedup (no photo to compare against) — same convention as the old /chat page
@@ -678,6 +690,16 @@ export function CaptureClient({
               onSubCreated={(s) => setLocalSubs((prev) => [...prev, s])}
               disabled={stage === "saving"}
               highlight={categoryCode === "contract_labor"}
+            />
+
+            {/* Project linkage */}
+            <ProjectPicker
+              projectId={projectId}
+              onChange={setProjectId}
+              projects={allProjects}
+              recencyByProjectId={projectRecencyDays}
+              onProjectCreated={(p) => setLocalProjects((prev) => [...prev, p])}
+              disabled={stage === "saving"}
             />
           </div>
 

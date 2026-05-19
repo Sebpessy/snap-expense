@@ -14,7 +14,7 @@ export default async function ExpensesPage() {
 
   if (!user) redirect("/login");
 
-  const [expensesResult, profileResult] = await Promise.all([
+  const [expensesResult, profileResult, projectsResult] = await Promise.all([
     supabase
       .from("expenses")
       .select("*")
@@ -23,12 +23,18 @@ export default async function ExpensesPage() {
       .order("created_at", { ascending: false }),
     supabase
       .from("profiles")
-      .select("plan, trial_ends_at, scan_count_this_period, encrypted_anthropic_key")
+      .select(
+        "plan, trial_ends_at, scan_count_this_period, scan_period_start, encrypted_anthropic_key",
+      )
       .eq("id", user.id)
       .single(),
+    supabase.from("projects").select("id, name").eq("user_id", user.id),
   ]);
 
   const expenses: Expense[] = expensesResult.data ?? [];
+  const projectNamesById = Object.fromEntries(
+    (projectsResult.data ?? []).map((p) => [p.id as string, p.name as string]),
+  );
 
   // Batch-sign receipt URLs for visible expenses
   const signedUrls = await signReceiptUrls(expenses.map((e) => e.receipt_path));
@@ -37,7 +43,7 @@ export default async function ExpensesPage() {
   );
 
   const userPlan = profileResult.data
-    ? await getUserPlan(profileResult.data)
+    ? await getUserPlan(profileResult.data, user.id)
     : {
         plan: "free",
         planName: "Free",
@@ -54,6 +60,7 @@ export default async function ExpensesPage() {
       expenses={expenses}
       userPlan={userPlan}
       thumbUrls={thumbUrls}
+      projectNamesById={projectNamesById}
     />
   );
 }

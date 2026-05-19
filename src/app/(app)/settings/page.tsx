@@ -15,13 +15,13 @@ export default async function SettingsPage() {
   const { data: profile } = await supabase
     .from("profiles")
     .select(
-      "plan, trial_ends_at, scan_count_this_period, encrypted_anthropic_key, stripe_customer_id",
+      "plan, trial_ends_at, scan_count_this_period, scan_period_start, encrypted_anthropic_key, stripe_customer_id",
     )
     .eq("id", user.id)
     .single();
 
   const userPlan = profile
-    ? await getUserPlan(profile)
+    ? await getUserPlan(profile, user.id)
     : {
         plan: "free",
         planName: "Free",
