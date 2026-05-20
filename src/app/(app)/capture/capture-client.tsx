@@ -348,7 +348,7 @@ export function CaptureClient({
 
   return (
     <div className="mx-auto max-w-lg px-4 py-6">
-      <h1 className="mb-6 text-2xl font-bold text-gray-900">Snap Expense</h1>
+      <h1 className="mb-6 text-2xl font-bold text-gray-900">Xpenz</h1>
 
       {/* API Key Banner */}
       {!hasApiKey && (

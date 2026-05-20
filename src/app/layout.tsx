@@ -9,13 +9,27 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Snap Expense",
-  description: "AI-powered expense categorizer for freelancers",
+  title: "Xpenz — Expense tracking built for investor-builders",
+  description:
+    "Snap a receipt. Done. Track every job-site expense by project, sub, and tax category — in 3 seconds, from your phone. Free for 90 days.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Snap Expense",
+    title: "Xpenz",
+  },
+  openGraph: {
+    title: "Xpenz — Expense tracking built for investor-builders",
+    description:
+      "Snap a receipt. Done. Track every job-site expense by project, sub, and tax category. Free for 90 days.",
+    type: "website",
+    siteName: "Xpenz",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Xpenz — Expense tracking built for investor-builders",
+    description:
+      "Snap a receipt. Done. Free for 90 days. Built for flippers, GCs, and BRRRR investors.",
   },
 };
 

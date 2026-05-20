@@ -1,7 +1,7 @@
 import { SignupClient } from "./signup-client";
 
 export const metadata = {
-  title: "Create account - Snap Expense",
+  title: "Create account — Xpenz",
 };
 
 export default function SignupPage() {

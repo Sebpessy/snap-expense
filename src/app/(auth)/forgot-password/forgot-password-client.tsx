@@ -36,8 +36,8 @@ export function ForgotPasswordClient() {
   return (
     <div className="flex flex-col items-center">
       <div className="mb-8 flex flex-col items-center text-center">
-        <Logo size={72} className="mb-3 rounded-2xl shadow-sm" />
-        <h1 className="text-3xl font-bold text-gray-900">Snap Expense</h1>
+        <Logo variant="icon" size={72} className="mb-3 rounded-2xl shadow-sm" />
+        <h1 className="text-3xl font-bold text-gray-900">Xpenz</h1>
         <p className="mt-2 text-sm text-gray-500">
           Reset your password
         </p>

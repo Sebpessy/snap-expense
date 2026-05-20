@@ -1,0 +1,134 @@
+import { Check, X } from "lucide-react";
+
+const COMPARISON = [
+  {
+    label: "Per-project / per-job-site allocation",
+    xpenz: true,
+    quickbooks: "Sort-of (class tracking, manual)",
+    expensify: false,
+  },
+  {
+    label: "Built-in subcontractor directory",
+    xpenz: true,
+    quickbooks: "Vendor list, no trade tracking",
+    expensify: false,
+  },
+  {
+    label: "Check / Zelle / wire payment tracking",
+    xpenz: true,
+    quickbooks: "Yes, but clunky",
+    expensify: "Card only",
+  },
+  {
+    label: "Schedule C tax categories out of the box",
+    xpenz: true,
+    quickbooks: true,
+    expensify: false,
+  },
+  {
+    label: "Designed for trades / phone-first capture",
+    xpenz: true,
+    quickbooks: false,
+    expensify: true,
+  },
+  {
+    label: "Costs less than your monthly diesel",
+    xpenz: true,
+    quickbooks: false,
+    expensify: false,
+  },
+];
+
+function Cell({ value }: { value: boolean | string }) {
+  if (value === true) {
+    return (
+      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700">
+        <Check size={16} strokeWidth={3} />
+      </span>
+    );
+  }
+  if (value === false) {
+    return (
+      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+        <X size={16} strokeWidth={3} />
+      </span>
+    );
+  }
+  return <span className="text-xs text-gray-500">{value}</span>;
+}
+
+export function BuiltForBuilders() {
+  return (
+    <section className="bg-gradient-to-b from-white to-gray-50 py-20 lg:py-28">
+      <div className="mx-auto max-w-7xl px-4 lg:px-8">
+        <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <div className="mb-3 text-sm font-bold uppercase tracking-wider text-brand-600">
+              Why builders pick Xpenz
+            </div>
+            <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
+              Generic expense apps weren't built for the way you work.
+            </h2>
+            <p className="mt-5 text-lg leading-relaxed text-gray-600">
+              QuickBooks is built for accountants. Expensify is built for office
+              workers expensing lunches. Neither one understands what it means to
+              run 3 to 30 active jobs, pay subs in mixed methods, and need every
+              expense pinned to a project for tax day.
+            </p>
+            <p className="mt-4 text-lg leading-relaxed text-gray-600">
+              Xpenz starts from your truck seat — phone in hand, receipt in hand,
+              sub waiting on a check — and works backward to clean books.
+            </p>
+
+            <ul className="mt-8 space-y-3">
+              {[
+                "Snap on-site, tag to a project in two taps",
+                "1099 totals per sub, ready before January",
+                "Job-cost view: see profit per project, not just per month",
+                "Your CPA gets one clean CSV, not 14 emails",
+              ].map((line) => (
+                <li key={line} className="flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-brand-600 text-white">
+                    <Check size={14} strokeWidth={3} />
+                  </span>
+                  <span className="text-[15px] text-gray-700">{line}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Comparison table */}
+          <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div className="grid grid-cols-[1.4fr_0.8fr_0.8fr_0.8fr] gap-3 bg-gradient-to-r from-brand-700 to-brand-600 px-4 py-4 text-xs font-bold uppercase tracking-wider text-white sm:px-5">
+              <div></div>
+              <div className="text-center">Xpenz</div>
+              <div className="text-center opacity-80">QuickBooks</div>
+              <div className="text-center opacity-80">Expensify</div>
+            </div>
+            <div className="divide-y divide-gray-100">
+              {COMPARISON.map((row) => (
+                <div
+                  key={row.label}
+                  className="grid grid-cols-[1.4fr_0.8fr_0.8fr_0.8fr] items-center gap-3 px-4 py-4 sm:px-5"
+                >
+                  <div className="text-[13px] font-medium text-gray-800 sm:text-sm">
+                    {row.label}
+                  </div>
+                  <div className="flex justify-center">
+                    <Cell value={row.xpenz} />
+                  </div>
+                  <div className="flex justify-center">
+                    <Cell value={row.quickbooks} />
+                  </div>
+                  <div className="flex justify-center">
+                    <Cell value={row.expensify} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

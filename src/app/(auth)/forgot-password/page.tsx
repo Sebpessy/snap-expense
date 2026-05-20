@@ -1,7 +1,7 @@
 import { ForgotPasswordClient } from "./forgot-password-client";
 
 export const metadata = {
-  title: "Reset password - Snap Expense",
+  title: "Reset password — Xpenz",
 };
 
 export default function ForgotPasswordPage() {

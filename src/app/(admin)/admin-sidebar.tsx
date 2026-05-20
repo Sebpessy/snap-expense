@@ -37,7 +37,7 @@ export function AdminSidebar() {
     <>
       {/* Mobile hamburger */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-gray-900 px-4 py-3 flex items-center justify-between">
-        <span className="text-white font-bold text-lg">Snap Expense Admin</span>
+        <span className="text-white font-bold text-lg">Xpenz Admin</span>
         <button
           onClick={() => setOpen(!open)}
           className="text-white p-1"
@@ -62,7 +62,7 @@ export function AdminSidebar() {
         }`}
       >
         <div className="px-6 py-6 border-b border-gray-800">
-          <h1 className="text-xl font-bold tracking-tight">Snap Expense</h1>
+          <h1 className="text-xl font-bold tracking-tight">Xpenz</h1>
           <p className="text-sm text-gray-400 mt-0.5">Admin Panel</p>
         </div>
 

@@ -55,9 +55,12 @@ export async function middleware(request: NextRequest) {
   // /reset-password lives in the same group but needs the recovery session, so
   // we don't bounce authed users off it.
   const isResetPage = pathname.startsWith("/reset-password");
+  // Root (marketing landing) and other public marketing routes are reachable
+  // by anyone. Authed users get bounced to /capture by the page itself.
+  const isPublicPage = pathname === "/";
 
   // Not authenticated and not on auth page → redirect to login
-  if (!user && !isAuthPage && !isResetPage) {
+  if (!user && !isAuthPage && !isResetPage && !isPublicPage) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
