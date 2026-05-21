@@ -30,7 +30,7 @@ const BADGES: Badge[] = [
   {
     label: "Date",
     value: "Nov 19",
-    position: "bottom-[34%] left-[3%] sm:bottom-[28%] sm:left-[2%]",
+    position: "top-[45%] right-[3%] sm:top-[48%] sm:right-[10%]",
     delay: 1.9,
     bobDuration: 3.8,
   },
