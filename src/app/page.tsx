@@ -11,6 +11,7 @@ import { PricingCards } from "./(marketing)/_components/pricing-cards";
 import { FAQ } from "./(marketing)/_components/faq";
 import { CTABanner } from "./(marketing)/_components/cta-banner";
 import { MarketingFooter } from "./(marketing)/_components/marketing-footer";
+import { Reveal } from "./(marketing)/_components/motion/reveal";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -25,16 +26,35 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-white text-gray-900">
       <MarketingNav />
+      {/* Hero handles its own motion internally (headline cascade + parallax) */}
       <Hero />
-      <SocialStrip />
-      <ProblemBlock />
-      <FeatureGrid />
-      <HowItWorks />
-      <BuiltForIndependents />
-      <PricingCards />
-      <FAQ />
-      <CTABanner />
-      <MarketingFooter />
+      <Reveal>
+        <HowItWorks />
+      </Reveal>
+      <Reveal y={16}>
+        <SocialStrip />
+      </Reveal>
+      <Reveal>
+        <ProblemBlock />
+      </Reveal>
+      <Reveal>
+        <FeatureGrid />
+      </Reveal>
+      <Reveal>
+        <BuiltForIndependents />
+      </Reveal>
+      <Reveal>
+        <PricingCards />
+      </Reveal>
+      <Reveal>
+        <FAQ />
+      </Reveal>
+      <Reveal>
+        <CTABanner />
+      </Reveal>
+      <Reveal y={12}>
+        <MarketingFooter />
+      </Reveal>
     </main>
   );
 }

@@ -1,5 +1,8 @@
+"use client";
+
 import { Check, X } from "lucide-react";
 import { CompareSplit } from "./illustrations";
+import { Stagger, StaggerItem } from "./motion/stagger";
 
 const COMPARISON = [
   {
@@ -109,9 +112,9 @@ export function BuiltForIndependents() {
               <div className="text-center opacity-80">QuickBooks</div>
               <div className="text-center opacity-80">Expensify</div>
             </div>
-            <div className="divide-y divide-gray-100">
+            <Stagger className="divide-y divide-gray-100" stagger={0.05} delayChildren={0.1}>
               {COMPARISON.map((row) => (
-                <div
+                <StaggerItem
                   key={row.label}
                   className="grid grid-cols-[1.4fr_0.8fr_0.8fr_0.8fr] items-center gap-3 px-4 py-4 sm:px-5"
                 >
@@ -127,9 +130,9 @@ export function BuiltForIndependents() {
                   <div className="flex justify-center">
                     <Cell value={row.expensify} />
                   </div>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
+            </Stagger>
           </div>
         </div>
       </div>

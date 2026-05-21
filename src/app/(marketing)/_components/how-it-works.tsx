@@ -1,5 +1,8 @@
-import { Camera, Tag, Download } from "lucide-react";
-import { FlowSnap, FlowTag, FlowExport } from "./illustrations";
+"use client";
+
+import { Camera, Tag } from "lucide-react";
+import { FlowSnap, FlowTag } from "./illustrations";
+import { Stagger, StaggerItem } from "./motion/stagger";
 
 const STEPS = [
   {
@@ -14,14 +17,7 @@ const STEPS = [
     icon: Tag,
     illustration: FlowTag,
     title: "Tag",
-    body: "Almost everything is already filled in. You just confirm the project or client and tap save. Six seconds, done.",
-  },
-  {
-    n: "03",
-    icon: Download,
-    illustration: FlowExport,
-    title: "Export",
-    body: "At month-end (or any time), download a CSV with every column your CPA needs — contractor 1099s included.",
+    body: "Everything is already filled in. You just confirm the project or client and tap save. 2 seconds, done.",
   },
 ];
 
@@ -37,7 +33,7 @@ export function HowItWorks() {
             How it works
           </div>
           <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
-            From phone to tax-ready in three steps.
+            From phone to tax-ready in two steps.
           </h2>
         </div>
 
@@ -46,9 +42,12 @@ export function HowItWorks() {
             aria-hidden
             className="absolute left-0 right-0 top-12 hidden h-0.5 bg-gradient-to-r from-transparent via-brand-200 to-transparent lg:block"
           />
-          <div className="grid gap-8 lg:grid-cols-3 lg:gap-10">
+          <Stagger
+            className="mx-auto grid max-w-4xl gap-8 lg:grid-cols-2 lg:gap-10"
+            stagger={0.15}
+          >
             {STEPS.map((s) => (
-              <div
+              <StaggerItem
                 key={s.n}
                 className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
               >
@@ -67,9 +66,9 @@ export function HowItWorks() {
                     {s.body}
                   </p>
                 </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
 
         <div className="mx-auto mt-14 max-w-3xl rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center">

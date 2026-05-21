@@ -1,5 +1,8 @@
+"use client";
+
 import { Inbox, TrendingDown, FileWarning } from "lucide-react";
 import { PainReceipts, PainProjects, Pain1099 } from "./illustrations";
+import { Stagger, StaggerItem } from "./motion/stagger";
 
 const PAINS = [
   {
@@ -39,9 +42,9 @@ export function ProblemBlock() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <Stagger className="mt-12 grid gap-6 md:grid-cols-3">
           {PAINS.map((p) => (
-            <div
+            <StaggerItem
               key={p.title}
               className="rounded-2xl border border-red-100 bg-red-50/40 p-6"
             >
@@ -53,9 +56,9 @@ export function ProblemBlock() {
               <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
                 {p.body}
               </p>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   );

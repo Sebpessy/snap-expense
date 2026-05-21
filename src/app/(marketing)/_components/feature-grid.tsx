@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FeatureScanTile,
   FeatureProjectsTile,
@@ -6,6 +8,7 @@ import {
   FeaturePaymentsTile,
   FeatureExportTile,
 } from "./illustrations";
+import { Stagger, StaggerItem } from "./motion/stagger";
 
 const FEATURES = [
   {
@@ -57,9 +60,9 @@ export function FeatureGrid() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <div
+            <StaggerItem
               key={f.title}
               className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lg hover:shadow-brand-100/60"
             >
@@ -70,9 +73,9 @@ export function FeatureGrid() {
                   {f.body}
                 </p>
               </div>
-            </div>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </div>
     </section>
   );

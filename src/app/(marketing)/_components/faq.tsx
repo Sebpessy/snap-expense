@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { Stagger, StaggerItem } from "./motion/stagger";
 
 const FAQS = [
   {
@@ -53,11 +54,11 @@ export function FAQ() {
           </h2>
         </div>
 
-        <div className="mt-12 space-y-3">
+        <Stagger className="mt-12 space-y-3" stagger={0.05}>
           {FAQS.map((item, i) => {
             const isOpen = open === i;
             return (
-              <div
+              <StaggerItem
                 key={item.q}
                 className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm"
               >
@@ -86,10 +87,10 @@ export function FAQ() {
                     </p>
                   </div>
                 )}
-              </div>
+              </StaggerItem>
             );
           })}
-        </div>
+        </Stagger>
       </div>
     </section>
   );
