@@ -1,4 +1,4 @@
-# Paid Ads — Xpenz 90-Day Launch
+# Paid Ads — Xpenz 30-Day Launch
 
 **Budget framing:** test with $20–40/day on Meta for 2 weeks before scaling. Google Ads layered on top once Meta is profitable.
 
@@ -7,7 +7,7 @@
 **UTM convention:**
 - `utm_source` — `meta` / `google` / `tiktok` / `linkedin`
 - `utm_medium` — `cpc`
-- `utm_campaign` — `launch90`
+- `utm_campaign` — `launch30`
 - `utm_content` — ad creative identifier (`problem-led-v1`, `proof-led-v2`, etc.)
 
 **No mention of any specific coach, mastermind, or named community** in ad creative. Generic "independents / self-employed / freelancers / small business" only.
@@ -59,15 +59,15 @@ Skip Audience Network and Messenger placements — they waste budget on low-inte
 **Primary text:**
 > Every year. Same pile of receipts in your bag / inbox / desk drawer. Same April panic. Same CPA bill that doubles because they have to sort it.
 >
-> Snap receipts straight from your phone — AI tags the vendor, project, client, and tax category. 90 days free. No credit card.
+> Snap receipts straight from your phone — AI tags the vendor, project, client, and tax category. 30 days free. No credit card.
 
-**Headline:** "Stop losing receipts. 90 days free."
+**Headline:** "Stop losing receipts. 30 days free."
 
 **Description:** "Built for independents and small business owners."
 
 **CTA button:** "Sign Up"
 
-**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=launch90&utm_content=problem-led-v1`
+**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=launch30&utm_content=problem-led-v1`
 
 ---
 
@@ -76,11 +76,11 @@ Skip Audience Network and Messenger placements — they waste budget on low-inte
 **Format:** single image — clean dashboard screenshot showing 4 active client projects with per-project totals.
 
 **Primary text:**
-> One freelancer, four clients. After 90 days of Xpenz she realized one client was costing her $1,800/mo in unbilled materials + software. She'd been working that client for months thinking it was fine.
+> One freelancer, four clients. After 30 days of Xpenz she realized one client was costing her $1,800/mo in unbilled materials + software. She'd been working that client for months thinking it was fine.
 >
 > That's the part QuickBooks doesn't tell you — which project specifically is the problem. Xpenz does.
 >
-> 90 days free. No credit card.
+> 30 days free. No credit card.
 
 **Headline:** "Know which client is bleeding cash."
 
@@ -88,7 +88,7 @@ Skip Audience Network and Messenger placements — they waste budget on low-inte
 
 **CTA:** "Learn More" → landing page
 
-**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=launch90&utm_content=proof-led-v1`
+**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=launch30&utm_content=proof-led-v1`
 
 ---
 
@@ -97,19 +97,19 @@ Skip Audience Network and Messenger placements — they waste budget on low-inte
 **Format:** static image with bold offer copy. Gold/amber background, navy headline, phone mockup at right.
 
 **Primary text:**
-> 90 days of Pro. Free. No credit card.
+> 30 days of Pro. Free. No credit card.
 >
 > Snap a receipt. AI fills in vendor, amount, project, client, tax category — in 3 seconds. CSV exports your CPA loves.
 >
 > If you're self-employed or running a small business, this is the tool you've been writing in your head.
 
-**Headline:** "90 days free Pro — Xpenz"
+**Headline:** "30 days free Pro — Xpenz"
 
 **Description:** "Receipt scanner + project tracking for independents."
 
 **CTA:** "Sign Up"
 
-**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=launch90&utm_content=offer-led-v1`
+**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=launch30&utm_content=offer-led-v1`
 
 ---
 
@@ -147,9 +147,9 @@ Layer Google on top of Meta after week 2. Lower volume, higher intent.
 **Headlines (15 max, pick 10–12):**
 - Receipts → categorized in 3 seconds
 - For freelancers & small business
-- Snap, tag, export. 90 days free.
+- Snap, tag, export. 30 days free.
 - The expense app for independents
-- 90 days free Pro · No credit card
+- 30 days free Pro · No credit card
 - Built for your phone, not a cubicle
 - Per-project expense tracking
 - Schedule C ready out of the box
@@ -157,9 +157,9 @@ Layer Google on top of Meta after week 2. Lower volume, higher intent.
 - AI receipt scanner for independents
 
 **Descriptions (4 max):**
-- Snap a receipt, AI tags vendor, project, client, tax category. CSV export. 90 days free.
+- Snap a receipt, AI tags vendor, project, client, tax category. CSV export. 30 days free.
 - Built for self-employed and small business. Per-project tracking, contractor directory, tax-ready export.
-- Stop losing receipts. Per-project cost tracking. 1099 totals ready in January. Try free for 90 days.
+- Stop losing receipts. Per-project cost tracking. 1099 totals ready in January. Try free for 30 days.
 - No credit card required. Built by an independent, for independents. Sign up at xpenz.us.
 
 ### Negative keywords (exclude these)
@@ -216,7 +216,7 @@ Skip at launch. Revisit if Meta CPA is great and you want to scale volume. The s
 | Event | Where |
 |-------|-------|
 | `landing_view` | Root page load |
-| `cta_click` | Any "Start 90 Days Free" button click |
+| `cta_click` | Any "Start 30 Days Free" button click |
 | `signup_start` | /signup page load |
 | `signup_complete` | After successful auth.signUp |
 | `first_scan` | First receipt logged |
@@ -243,4 +243,4 @@ After 30+ days of data:
 
 - **Retarget landing-page visitors who didn't sign up** — Meta carousel showing 3 features, headline "Still on the fence?"
 - **Retarget signups who didn't scan** — drip email + Meta ad showing a 6-second reel of the snap flow
-- **Retarget free users at day 75 of their 90-day trial** — soft upgrade nudge with a 20% off first 3 months offer to convert before the trial ends
+- **Retarget free users at day 25 of their 30-day trial** — soft upgrade nudge with a 20% off first 3 months offer to convert before the trial ends

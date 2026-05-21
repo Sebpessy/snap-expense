@@ -1,4 +1,4 @@
-# Print Asset Specs — Xpenz 90-Day Launch
+# Print Asset Specs — Xpenz 30-Day Launch
 
 Two pieces. Both designed to hand to an independent worker at an event, drop on a coworking-space corkboard, or stick in a portfolio binder.
 
@@ -32,16 +32,16 @@ Two pieces. Both designed to hand to an independent worker at an event, drop on 
 |                                          |
 |   --------                               |
 |                                          |
-|   90 days free.    xpenz.us              |
+|   30 days free.    xpenz.us              |
 |   No credit card.                        |
 |                                          |
 +------------------------------------------+
 ```
 
 - **Wordmark** (top-left): "Xpenz" in Inter ExtraBold, white on navy.
-- **QR code** (top-right): scan target = `https://xpenz.us/?utm_source=card&utm_medium=print&utm_campaign=launch90`
+- **QR code** (top-right): scan target = `https://xpenz.us/?utm_source=card&utm_medium=print&utm_campaign=launch30`
 - **Headline:** "Snap a receipt. Done." — Inter ExtraBold, ~22pt
-- **Offer line:** "90 days free. No credit card." — Inter Semibold, amber accent
+- **Offer line:** "30 days free. No credit card." — Inter Semibold, amber accent
 - **URL:** "xpenz.us" — Inter Bold
 
 ### Back layout
@@ -56,7 +56,7 @@ Two pieces. Both designed to hand to an independent worker at an event, drop on 
 |   ✓  Track contractors for 1099s         |
 |   ✓  Export CSV your CPA loves           |
 |                                          |
-|   xpenz.us  ·  90 days free              |
+|   xpenz.us  ·  30 days free              |
 |                                          |
 +------------------------------------------+
 ```
@@ -128,7 +128,7 @@ Background: white. Type: Inter, 9–10pt for bullets, dark gray (#1f2937). Amber
 |                                                  |
 |   ============================================   |
 |   |                                          |   |
-|   |   90 DAYS FREE PRO.                      |   |
+|   |   30 DAYS FREE PRO.                      |   |
 |   |   NO CREDIT CARD.                        |   |
 |   |                                          |   |
 |   |   xpenz.us           [LARGE QR CODE]     |   |
@@ -146,7 +146,7 @@ Background: white. Type: Inter, 9–10pt for bullets, dark gray (#1f2937). Amber
 - **Headline ("Snap a receipt. Done."):** Inter Black, 72pt, navy with amber drop on "Done."
 - **Subheading ("Built for the self-employed."):** Inter Semibold, 24pt, brand blue.
 - **Bullet body:** Inter Medium, 16pt, dark gray.
-- **Promo box:** amber background (#f59e0b), white text, 32pt Inter ExtraBold for "90 DAYS FREE PRO."
+- **Promo box:** amber background (#f59e0b), white text, 32pt Inter ExtraBold for "30 DAYS FREE PRO."
 
 ### Print-friendly grayscale fallback
 
@@ -154,7 +154,7 @@ If the venue's printer is b&w only, design must legibly degrade to grayscale. Do
 
 ### QR code URL
 
-`https://xpenz.us/?utm_source=flyer&utm_medium=print&utm_campaign=launch90`
+`https://xpenz.us/?utm_source=flyer&utm_medium=print&utm_campaign=launch30`
 
 Test with three different phones (iPhone front camera, Android default, older iPhone) before sending to the printer.
 

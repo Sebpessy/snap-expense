@@ -1,4 +1,4 @@
-# Marketing — Xpenz 90-Day Launch
+# Marketing — Xpenz 30-Day Launch
 
 Generic, broad-audience framing throughout. Target: independent workers and small business owners — freelancers, consultants, contractors, agencies, e-commerce sellers, photographers, trades, anyone with 1099 income or self-employment expenses. No coach / community / niche references in any deliverable — verified by grep before each ship.
 
@@ -13,18 +13,18 @@ Generic, broad-audience framing throughout. Target: independent workers and smal
 
 ## Campaign at a glance
 
-- **Offer:** 90 days of Pro, free, no credit card required.
+- **Offer:** 30 days of Pro, free, no credit card required.
 - **Mechanism:** universal — applies to every new signup during the campaign window. Set via Supabase trigger in [migrations/007_extend_trial_to_90_days.sql](../../supabase/migrations/007_extend_trial_to_90_days.sql).
 - **Landing page:** root of xpenz.us. Code lives in [src/app/page.tsx](../../src/app/page.tsx) + [src/app/(marketing)/_components/](../../src/app/(marketing)/_components/).
-- **Primary CTA everywhere:** "Start 90 Days Free" → `/signup`.
+- **Primary CTA everywhere:** "Start 30 Days Free" → `/signup`.
 
 ## UTM convention (use everywhere)
 
-`?utm_source={source}&utm_medium={medium}&utm_campaign=launch90&utm_content={creative}`
+`?utm_source={source}&utm_medium={medium}&utm_campaign=launch30&utm_content={creative}`
 
 - `utm_source`: `ig`, `fb`, `meta`, `google`, `card`, `flyer`, `email`, `dm`, `tiktok`
 - `utm_medium`: `dm`, `cpc`, `print`, `organic`, `email`
-- `utm_campaign`: always `launch90` for this push
+- `utm_campaign`: always `launch30` for this push
 - `utm_content`: specific creative identifier
 
 ## Operating cadence

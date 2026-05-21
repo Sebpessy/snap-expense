@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Xpenz — Expense tracking built for the self-employed",
   description:
-    "Snap a receipt. Done. Track every business expense by project, client, and tax category — in 3 seconds, from your phone. Free for 90 days.",
+    "Snap a receipt. Done. Track every business expense by project, client, and tax category — in 3 seconds, from your phone. Free for 30 days.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Xpenz — Expense tracking built for the self-employed",
     description:
-      "Snap a receipt. Done. Track every business expense by project, client, and tax category. Free for 90 days.",
+      "Snap a receipt. Done. Track every business expense by project, client, and tax category. Free for 30 days.",
     type: "website",
     siteName: "Xpenz",
   },
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Xpenz — Expense tracking built for the self-employed",
     description:
-      "Snap a receipt. Done. Free for 90 days. Built for freelancers, consultants, contractors, and small businesses.",
+      "Snap a receipt. Done. Free for 30 days. Built for freelancers, consultants, contractors, and small businesses.",
   },
 };
 

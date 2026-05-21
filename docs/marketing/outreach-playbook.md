@@ -1,8 +1,8 @@
-# Outreach Playbook — Xpenz.us 90-Day Launch
+# Outreach Playbook — Xpenz.us 30-Day Launch
 
 **Audience:** independent workers and small business owners. Freelancers (designers, writers, developers, photographers), consultants, contractors, agencies, e-commerce sellers, trades, real estate investors, coaches, anyone with 1099 income or self-employment expenses. They live on Instagram, LinkedIn, Facebook, and X/Twitter. They get pitched constantly — most pitches sound the same.
 
-**Promise:** snap a receipt, done — free for 90 days, no credit card.
+**Promise:** snap a receipt, done — free for 30 days, no credit card.
 
 **Voice rules:**
 1. Write like one independent talking to another. Short. Direct. Specific.
@@ -22,7 +22,7 @@ Use these as starting points. Personalize the **bracketed slots** every time. Ma
 
 > Hey {first_name} — saw your {specific work reference, e.g. "Q3 brand work you posted"} on your feed. Quick one: how do you currently keep track of which receipts belong to which client?
 >
-> Asking because I built something for independents who are tired of the shoebox-at-tax-time thing. xpenz.us — 90 days free, no card.
+> Asking because I built something for independents who are tired of the shoebox-at-tax-time thing. xpenz.us — 30 days free, no card.
 >
 > No worries if not your jam.
 >
@@ -34,7 +34,7 @@ Use these as starting points. Personalize the **bracketed slots** every time. Ma
 
 > Hey {first_name} — your post about {specific thing they posted, e.g. "the invoicing pileup last quarter"} made me laugh because that's exactly the kind of week that breaks my expense tracking.
 >
-> I built a thing for independents — snap a receipt, AI tags the client + category + payment method in 3 seconds. xpenz.us is free for 90 days right now.
+> I built a thing for independents — snap a receipt, AI tags the client + category + payment method in 3 seconds. xpenz.us is free for 30 days right now.
 >
 > Curious if you'd want to try it on one project. No pressure.
 >
@@ -46,7 +46,7 @@ Use these as starting points. Personalize the **bracketed slots** every time. Ma
 
 > Hey {first_name} — quick one. Looks like you've got several active clients going. How are you keeping each client's expenses straight at tax time?
 >
-> If the answer is "a folder full of PDFs and a prayer," xpenz.us is free for 90 days. Snap, tag the client, done. No card.
+> If the answer is "a folder full of PDFs and a prayer," xpenz.us is free for 30 days. Snap, tag the client, done. No card.
 >
 > If you've got it dialed already, ignore me.
 >
@@ -60,7 +60,7 @@ Use these as starting points. Personalize the **bracketed slots** every time. Ma
 
 ### If they reply positively ("interesting, send me the link" / "I'll check it out")
 
-> Awesome. xpenz.us — sign up takes 30 seconds, no card. The 90 days starts the moment you create the account.
+> Awesome. xpenz.us — sign up takes 30 seconds, no card. The 30 days starts the moment you create the account.
 >
 > If you snap your first receipt and the AI gets it wrong, screenshot me — I want to know. Real user feedback is how this gets better.
 
@@ -74,7 +74,7 @@ Use these as starting points. Personalize the **bracketed slots** every time. Ma
 > 2. Tag it to a project, client, or just a category. So at tax time you know exactly where every dollar went.
 > 3. Export a clean CSV your CPA can use without re-sorting.
 >
-> 90 days free at xpenz.us. Try it on one project — if it doesn't save you an hour in the first week, delete it.
+> 30 days free at xpenz.us. Try it on one project — if it doesn't save you an hour in the first week, delete it.
 
 ### If they reply with skepticism ("I already use QuickBooks")
 
@@ -82,17 +82,17 @@ Use these as starting points. Personalize the **bracketed slots** every time. Ma
 >
 > A lot of independents use both. Xpenz catches the data clean as it happens, then exports a CSV you import to QBO.
 >
-> If you want to kick the tires it's 90 days free — no card. xpenz.us.
+> If you want to kick the tires it's 30 days free — no card. xpenz.us.
 
 ### If they don't reply at all → follow-up #1 (wait 4–6 days)
 
-> Hey {first_name} — circling once. Not trying to be a pest, just figured the 90-day window is open and you might've missed the original message.
+> Hey {first_name} — circling once. Not trying to be a pest, just figured the 30-day window is open and you might've missed the original message.
 >
 > xpenz.us if you want to peek. Either way, good luck on the {specific project}.
 
 ### Follow-up #2 (wait another 6–10 days, then stop forever)
 
-> Last one from me. If you ever want to look it's xpenz.us — same 90-day deal.
+> Last one from me. If you ever want to look it's xpenz.us — same 30-day deal.
 >
 > Otherwise I'll catch you in the feed. Build well.
 
@@ -113,7 +113,7 @@ Use these as starting points. Personalize the **bracketed slots** every time. Ma
 **Subject lines (rotate, A/B if possible):**
 - The receipt thing
 - For independents running multiple clients
-- 90 days of Xpenz, on me
+- 30 days of Xpenz, on me
 
 **Body:**
 
@@ -123,7 +123,7 @@ Use these as starting points. Personalize the **bracketed slots** every time. Ma
 >
 > It's an app you open with your thumb, point at a receipt, and it's logged — vendor, amount, project, client, tax category — in about three seconds.
 >
-> For the next stretch I'm giving every new user 90 days of Pro, free, no credit card. Just sign up at **xpenz.us**.
+> For the next stretch I'm giving every new user 30 days of Pro, free, no credit card. Just sign up at **xpenz.us**.
 >
 > If it's not for you, no harm done. If it is — your tax season just got a lot quieter.
 >
@@ -138,25 +138,25 @@ Use these as starting points. Personalize the **bracketed slots** every time. Ma
 
 > {first_name} —
 >
-> Following up because the 90-day Xpenz window is still open and I figured you might want a real example before deciding if it's worth the 30 seconds to sign up.
+> Following up because the 30-day Xpenz window is still open and I figured you might want a real example before deciding if it's worth the 30 seconds it takes to sign up.
 >
 > A freelancer I know was juggling four clients simultaneously. Used Xpenz for one quarter. End of quarter, she realized two clients were profitable, one was breakeven, and one was costing her unbilled time + materials every single week. She'd been working that fourth client for months thinking it was fine.
 >
 > That's the part no expense app tells you — *which client specifically is the problem.* Xpenz does, because every receipt is tagged to a project or client the moment you snap it.
 >
-> 90 days free at **xpenz.us** if you want to point it at one of your active clients and see what shows up.
+> 30 days free at **xpenz.us** if you want to point it at one of your active clients and see what shows up.
 >
 > Seb
 
 ### Email 3 — Day 7: Last call
 
-**Subject:** Last note about the 90-day thing
+**Subject:** Last note about the 30-day thing
 
 **Body:**
 
 > {first_name},
 >
-> Last time you'll hear from me on this. The 90-day Xpenz trial is still live — **xpenz.us** — and I wanted to make sure you saw it before it slips off your radar.
+> Last time you'll hear from me on this. The 30-day Xpenz trial is still live — **xpenz.us** — and I wanted to make sure you saw it before it slips off your radar.
 >
 > Three reasons independents sign up:
 >
@@ -178,7 +178,7 @@ Triggered automatically when someone creates an account. **Requires a transactio
 
 | # | When | Subject | One-line goal |
 |---|------|---------|---------------|
-| 1 | Day 0 (immediate) | Welcome to Xpenz — your 90 days start now | Confirm signup, get them to snap their first receipt |
+| 1 | Day 0 (immediate) | Welcome to Xpenz — your 30 days start now | Confirm signup, get them to snap their first receipt |
 | 2 | Day 1 | One thing most users skip | Get them to add their first project / client + contractor |
 | 3 | Day 7 | How's the receipt pile? | Soft check-in, link to a 2-minute help doc on bulk catch-up |
 | 4 | Day 30 | Your first month — here's what we found | Personalized summary: # of receipts logged, top vendor, top contractor, projects tracked |

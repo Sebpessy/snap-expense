@@ -45,7 +45,7 @@ Snap Expense uses a BYOK model for the Claude Vision API. Each user provides the
 | Export | CSV | CSV, PDF | CSV, PDF, QuickBooks |
 | Team members | 1 | 1 | Unlimited |
 | API key storage | BYOK | BYOK | BYOK |
-| Trial | 90 days Pro | - | - |
+| Trial | 30 days Pro | - | - |
 
 ## Setup Instructions
 

@@ -21,7 +21,7 @@ export function CTABanner() {
           Start running your business like a CFO.
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-gray-800/90">
-          90 days of Pro, on the house. No credit card. Your tax season gets
+          30 days of Pro, on the house. No credit card. Your tax season gets
           quieter starting the day you sign up.
         </p>
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -29,7 +29,7 @@ export function CTABanner() {
             href="/signup"
             className="group inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-8 py-4 text-base font-bold text-white shadow-lg transition hover:bg-gray-800"
           >
-            Start 90 Days Free
+            Start 30 Days Free
             <ArrowRight
               size={18}
               className="transition group-hover:translate-x-0.5"

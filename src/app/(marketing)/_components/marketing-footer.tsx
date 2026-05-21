@@ -52,7 +52,7 @@ export function MarketingFooter() {
             <ul className="mt-4 space-y-2 text-sm text-gray-600">
               <li>
                 <Link href="/signup" className="hover:text-brand-600">
-                  Start 90 days free
+                  Start 30 days free
                 </Link>
               </li>
               <li>

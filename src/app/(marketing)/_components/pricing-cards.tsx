@@ -56,7 +56,7 @@ export async function PricingCards() {
             Pricing
           </div>
           <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
-            Free for 90 days. Then less than your monthly coffee.
+            Free for 30 days. Then less than your monthly coffee.
           </h2>
           <p className="mt-5 text-lg text-gray-600">
             No credit card to start. No auto-charge surprise. Cancel any time
@@ -82,7 +82,7 @@ export async function PricingCards() {
                 {isPro && (
                   <div className="absolute -top-3 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-amber-400 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-gray-900 shadow-md">
                     <Sparkles size={12} strokeWidth={3} />
-                    90 days free
+                    30 days free
                   </div>
                 )}
 
@@ -136,7 +136,7 @@ export async function PricingCards() {
                     }`}
                   >
                     {isPro
-                      ? "Start 90 Days Free"
+                      ? "Start 30 Days Free"
                       : plan.code === "free"
                         ? "Start Free"
                         : "Get Business"}
@@ -145,7 +145,7 @@ export async function PricingCards() {
 
                 {isPro && (
                   <p className="mt-3 text-center text-xs text-gray-500">
-                    No credit card required during your 90-day trial.
+                    No credit card required during your 30-day trial.
                   </p>
                 )}
               </div>

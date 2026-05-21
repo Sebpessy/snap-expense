@@ -1,4 +1,4 @@
-# Social Content Calendar — Xpenz 90-Day Launch
+# Social Content Calendar — Xpenz 30-Day Launch
 
 **Platforms:** Instagram (primary), TikTok (reels), LinkedIn (carousel + native posts), X/Twitter (low-effort), Facebook (cross-post).
 
@@ -19,7 +19,7 @@
 >
 > Snap receipts straight from wherever you're working. AI tags the vendor, amount, project, client, and tax category. CSV at month-end.
 >
-> 90 days free at xpenz.us 👇 (link in bio)
+> 30 days free at xpenz.us 👇 (link in bio)
 >
 > #selfemployed #freelance #smallbusiness #soloprenuer
 
@@ -30,7 +30,7 @@
 >
 > The actual question isn't "is this faster than QuickBooks." It's "are you still doing this at 11pm on the 31st of every month."
 >
-> 90 days free at xpenz.us. No credit card.
+> 30 days free at xpenz.us. No credit card.
 
 ### 3. The "POV" reel concept (caption for the post)
 
@@ -39,7 +39,7 @@
 >
 > If that sentence raises your blood pressure, the rest of this year is fixable.
 >
-> xpenz.us — 90 days free, link in bio.
+> xpenz.us — 30 days free, link in bio.
 
 ### 4. The educational post (value, no pitch)
 
@@ -60,7 +60,7 @@
 >
 > The one on the right takes about 5 minutes per week.
 >
-> 90 days free at xpenz.us.
+> 30 days free at xpenz.us.
 
 ### 6. The "what your CPA actually wants" post
 
@@ -71,7 +71,7 @@
 >
 > Your CPA wants a CSV with: vendor, amount, date, category, project / client, payment method.
 >
-> Xpenz exports exactly that. 90 days free, no credit card. xpenz.us.
+> Xpenz exports exactly that. 30 days free, no credit card. xpenz.us.
 
 ### 7. The contrarian / counter-positioning post
 
@@ -80,7 +80,7 @@
 >
 > Neither one was built for someone juggling 4 clients, paying 7 contractors, and trying to find a receipt that got buried at the bottom of a bag last Tuesday.
 >
-> Xpenz was. xpenz.us — 90 days free.
+> Xpenz was. xpenz.us — 30 days free.
 
 ### 8. The 1099 / contractor-payment post
 
@@ -89,21 +89,21 @@
 >
 > Spoiler: it was both.
 >
-> Xpenz remembers for you. 90 days free.
+> Xpenz remembers for you. 30 days free.
 
 ### 9. The "founder transparency" post (you)
 
 > **Caption:**
 > Real talk: I built Xpenz because I'm an independent worker myself, and the existing apps were either too expensive, too generic, or too built-for-office-people.
 >
-> 90 days free isn't a marketing trick — it's because I need real feedback from real users to make this better.
+> 30 days free isn't a marketing trick — it's because I need real feedback from real users to make this better.
 >
 > If you try it and something sucks, tell me. xpenz.us.
 
 ### 10. The simple offer post (final-push aesthetic)
 
 > **Caption:**
-> 90 days.
+> 30 days.
 > Free.
 > No credit card.
 > No catch.
@@ -125,7 +125,7 @@
 **Cut (8–15s):** *Phone in hand, snapping a receipt with Xpenz. UI overlay shows the AI extraction.*
 **Voiceover:** "Or — you do this. 3 seconds. Vendor, amount, project, client, tax category. Done."
 
-**End card (15–18s):** "xpenz.us — 90 days free."
+**End card (15–18s):** "xpenz.us — 30 days free."
 
 ---
 
@@ -137,7 +137,7 @@
 **Cut (3–12s):** *Toss the receipt on the table. Pull out phone. Open Xpenz. Snap. AI fills in fields. You tap the client name. Tap the payment method. Done.*
 **Voiceover:** "Snap. Pick the client. Pick how I paid. That's it. Six seconds. Now that $48 latte-and-laptop session shows up on the right project at the right amount when January hits."
 
-**End card (12–15s):** "xpenz.us — 90 days free, no card."
+**End card (12–15s):** "xpenz.us — 30 days free, no card."
 
 ---
 
@@ -152,7 +152,7 @@
 **Cut (10–18s):** *Switch to Xpenz dashboard. The "Project / Client" column is highlighted.*
 **Voiceover:** "Until you can answer that for every receipt, you don't actually know which client is making you money."
 
-**End card (18–20s):** "xpenz.us — 90 days free."
+**End card (18–20s):** "xpenz.us — 30 days free."
 
 ---
 
@@ -177,7 +177,7 @@
 **On-screen text:** "After."
 **Voiceover:** "Same independent. Same week. Different system."
 
-**End card (8–12s):** "xpenz.us — 90 days free, no card required."
+**End card (8–12s):** "xpenz.us — 30 days free, no card required."
 
 ---
 
@@ -193,7 +193,7 @@
 
 ### Story 2 — Countdown (urgency)
 
-**Visual:** Xpenz logo + "90 Days Free" text.
+**Visual:** Xpenz logo + "30 Days Free" text.
 **Countdown sticker:** set to launch end-date (e.g. campaign close).
 **Text overlay:** "If you're independent and not on this yet — link below."
 **Link sticker:** xpenz.us

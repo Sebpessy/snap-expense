@@ -37,7 +37,7 @@ export function Hero() {
         <div className="max-w-xl">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-300/40 bg-amber-400/15 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-amber-200 backdrop-blur">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-300" />
-            Launch promo — 90 days free Pro
+            Launch promo — 30 days free Pro
           </div>
 
           <h1 className="text-4xl font-extrabold tracking-tight drop-shadow-md sm:text-5xl lg:text-6xl">
@@ -59,7 +59,7 @@ export function Hero() {
               href="/signup"
               className="group inline-flex items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 py-4 text-base font-bold text-gray-900 shadow-lg shadow-amber-500/30 transition hover:bg-amber-300"
             >
-              Start 90 Days Free
+              Start 30 Days Free
               <ArrowRight
                 size={18}
                 className="transition group-hover:translate-x-0.5"

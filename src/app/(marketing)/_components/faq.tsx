@@ -6,10 +6,10 @@ import { Plus, Minus } from "lucide-react";
 const FAQS = [
   {
     q: "Do I need a credit card to start?",
-    a: "No. You sign up with email, get 90 days of Pro for free, and we only ask for a card if you choose to keep going after that.",
+    a: "No. You sign up with email, get 30 days of Pro for free, and we only ask for a card if you choose to keep going after that.",
   },
   {
-    q: "What happens after my 90 days?",
+    q: "What happens after my 30 days?",
     a: "Your account quietly drops to the Free plan (15 scans/month) unless you upgrade. Nothing gets deleted — your projects, subs, and expense history stay with you. You can upgrade any time.",
   },
   {
@@ -34,7 +34,7 @@ const FAQS = [
   },
   {
     q: "What if I have hundreds of receipts already piled up?",
-    a: "Snap as many as you want during your 90-day Pro trial — unlimited scans. People typically catch up an entire year of receipts in a single evening on the couch.",
+    a: "Snap as many as you want during your 30-day Pro trial — unlimited scans. People typically catch up an entire year of receipts in a single evening on the couch.",
   },
 ];
 
