@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Xpenz — Expense tracking built for the self-employed",
+  title: "Xpenz — AI expense tracking for any business",
   description:
     "Snap a receipt. Done. Track every business expense by project, client, and tax category — in 3 seconds, from your phone. Free for 30 days.",
   manifest: "/manifest.json",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "Xpenz",
   },
   openGraph: {
-    title: "Xpenz — Expense tracking built for the self-employed",
+    title: "Xpenz — AI expense tracking for any business",
     description:
       "Snap a receipt. Done. Track every business expense by project, client, and tax category. Free for 30 days.",
     type: "website",
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Xpenz — Expense tracking built for the self-employed",
+    title: "Xpenz — AI expense tracking for any business",
     description:
-      "Snap a receipt. Done. Free for 30 days. Built for freelancers, consultants, contractors, and small businesses.",
+      "Snap a receipt. Done. AI tags vendor, total, date, and tax category in seconds. Built for businesses of every size. Free for 30 days.",
   },
 };
 
