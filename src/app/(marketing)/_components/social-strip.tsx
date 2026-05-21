@@ -16,20 +16,20 @@ export function SocialStrip() {
               ))}
             </div>
             <span className="ml-1.5">
-              Built for builders running 3–30 active jobs.
+              Built for people who run their own work.
             </span>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[11px] font-bold uppercase tracking-widest text-gray-400">
-            <span>Flippers</span>
+            <span>Freelancers</span>
             <span className="hidden sm:inline">·</span>
-            <span>Small GCs</span>
+            <span>Consultants</span>
             <span className="hidden sm:inline">·</span>
-            <span>BRRRR investors</span>
+            <span>Contractors</span>
             <span className="hidden sm:inline">·</span>
-            <span>Remodelers</span>
+            <span>Agencies</span>
             <span className="hidden sm:inline">·</span>
-            <span>Handymen scaling up</span>
+            <span>Small businesses</span>
           </div>
         </div>
       </div>

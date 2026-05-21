@@ -1,16 +1,17 @@
 import { Check, X } from "lucide-react";
+import { CompareSplit } from "./illustrations";
 
 const COMPARISON = [
   {
-    label: "Per-project / per-job-site allocation",
+    label: "Per-project / per-client allocation",
     xpenz: true,
     quickbooks: "Sort-of (class tracking, manual)",
     expensify: false,
   },
   {
-    label: "Built-in subcontractor directory",
+    label: "Built-in contractor & vendor directory",
     xpenz: true,
-    quickbooks: "Vendor list, no trade tracking",
+    quickbooks: "Vendor list, no tagging",
     expensify: false,
   },
   {
@@ -26,13 +27,13 @@ const COMPARISON = [
     expensify: false,
   },
   {
-    label: "Designed for trades / phone-first capture",
+    label: "Designed phone-first for people who work outside a desk",
     xpenz: true,
     quickbooks: false,
     expensify: true,
   },
   {
-    label: "Costs less than your monthly diesel",
+    label: "Costs less than your monthly coffee subscription",
     xpenz: true,
     quickbooks: false,
     expensify: false,
@@ -49,7 +50,7 @@ function Cell({ value }: { value: boolean | string }) {
   }
   if (value === false) {
     return (
-      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-gray-400">
+      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-red-100 text-red-600">
         <X size={16} strokeWidth={3} />
       </span>
     );
@@ -57,34 +58,37 @@ function Cell({ value }: { value: boolean | string }) {
   return <span className="text-xs text-gray-500">{value}</span>;
 }
 
-export function BuiltForBuilders() {
+export function BuiltForIndependents() {
   return (
     <section className="bg-gradient-to-b from-white to-gray-50 py-20 lg:py-28">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
+        <CompareSplit className="mx-auto mb-12 w-full max-w-4xl rounded-2xl border border-gray-200 shadow-sm" />
+
         <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <div className="mb-3 text-sm font-bold uppercase tracking-wider text-brand-600">
-              Why builders pick Xpenz
+              Why independents pick Xpenz
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
               Generic expense apps weren't built for the way you work.
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-gray-600">
-              QuickBooks is built for accountants. Expensify is built for office
-              workers expensing lunches. Neither one understands what it means to
-              run 3 to 30 active jobs, pay subs in mixed methods, and need every
-              expense pinned to a project for tax day.
+              QuickBooks is built for accountants. Expensify is built for
+              office workers expensing lunches. Neither one understands what
+              it means to run multiple projects or clients, pay people in
+              mixed methods, and need every expense pinned to the right
+              bucket for tax day.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-gray-600">
-              Xpenz starts from your truck seat — phone in hand, receipt in hand,
-              sub waiting on a check — and works backward to clean books.
+              Xpenz starts wherever you are — phone in hand, receipt in
+              hand, work to get back to — and quietly produces clean books.
             </p>
 
             <ul className="mt-8 space-y-3">
               {[
-                "Snap on-site, tag to a project in two taps",
-                "1099 totals per sub, ready before January",
-                "Job-cost view: see profit per project, not just per month",
+                "Snap as it happens, tag to a project in two taps",
+                "1099 totals per contractor, ready before January",
+                "Profit-per-project view, not just per-month",
                 "Your CPA gets one clean CSV, not 14 emails",
               ].map((line) => (
                 <li key={line} className="flex items-start gap-3">

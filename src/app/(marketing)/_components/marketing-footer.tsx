@@ -12,8 +12,8 @@ export function MarketingFooter() {
               <Logo variant="wordmark" size={88} />
             </Link>
             <p className="mt-4 max-w-xs text-sm text-gray-600">
-              Built for investor-builders, flippers, and small GCs who'd rather
-              build than do paperwork.
+              Built for independent professionals and small business owners
+              who'd rather do the work than do the paperwork.
             </p>
           </div>
 
@@ -99,8 +99,8 @@ export function MarketingFooter() {
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-gray-200 pt-6 text-xs text-gray-500 sm:flex-row sm:items-center">
-          <div>© {year} Xpenz. Built for builders.</div>
-          <div>Made for the trades.</div>
+          <div>© {year} Xpenz. Built for independent work.</div>
+          <div>Made for people who run their own work.</div>
         </div>
       </div>
     </footer>

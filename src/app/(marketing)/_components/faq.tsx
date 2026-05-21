@@ -14,7 +14,7 @@ const FAQS = [
   },
   {
     q: "Can I export to QuickBooks?",
-    a: "Today we export a clean CSV with every column your CPA or QuickBooks needs (vendor, amount, project, sub, payment method, Schedule C category). A direct QuickBooks Online sync is on the roadmap.",
+    a: "Today we export a clean CSV with every column your CPA or QuickBooks needs (vendor, amount, project, client, contractor, payment method, Schedule C category). A direct QuickBooks Online sync is on the roadmap.",
   },
   {
     q: "How does the AI scan work? Is my data private?",
@@ -29,8 +29,8 @@ const FAQS = [
     a: "Yes. The Business plan adds multi-user team access, so your bookkeeper can log in directly instead of waiting for an email export. Each user is $6.99/mo.",
   },
   {
-    q: "Will this work if I'm not a GC — just a flipper / landlord / handyman?",
-    a: "Absolutely. The product is built for anyone running projects with mixed expenses and 1099 contractors — flippers, BRRRR investors, small remodelers, handymen scaling up. The Schedule C structure works the same way.",
+    q: "Does this work for freelancers and creatives, not just service businesses?",
+    a: "Yes. Xpenz works for anyone with self-employment income or business expenses — freelance designers, photographers, consultants, agencies, e-commerce sellers, trades, real estate investors, small remodelers, coaches, writers. If you file a Schedule C (or are headed there), it fits.",
   },
   {
     q: "What if I have hundreds of receipts already piled up?",

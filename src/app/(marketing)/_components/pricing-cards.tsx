@@ -1,6 +1,17 @@
 import Link from "next/link";
 import { Check, Sparkles } from "lucide-react";
 import { getActivePlans } from "@/lib/plans";
+import {
+  PlanFreeIcon,
+  PlanProIcon,
+  PlanBusinessIcon,
+} from "./illustrations";
+
+const PLAN_ICONS: Record<string, (p: { className?: string }) => React.ReactElement> = {
+  free: PlanFreeIcon,
+  pro: PlanProIcon,
+  business: PlanBusinessIcon,
+};
 
 function formatPrice(cents: number | null | undefined) {
   if (cents == null) return "Free";
@@ -11,13 +22,13 @@ const FEATURE_BULLETS: Record<string, string[]> = {
   free: [
     "15 receipt scans / month",
     "Unlimited manual entries",
-    "Project & sub tracking",
+    "Project & contractor tracking",
     "CSV export",
   ],
   pro: [
     "Unlimited AI receipt scans",
     "All Schedule C categories",
-    "Subcontractor + 1099 tracking",
+    "Contractor + 1099 tracking",
     "Payment-method audit trail",
     "Priority support",
   ],
@@ -45,7 +56,7 @@ export async function PricingCards() {
             Pricing
           </div>
           <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
-            Free for 90 days. Then less than your monthly diesel.
+            Free for 90 days. Then less than your monthly coffee.
           </h2>
           <p className="mt-5 text-lg text-gray-600">
             No credit card to start. No auto-charge surprise. Cancel any time
@@ -58,6 +69,7 @@ export async function PricingCards() {
             const isPro = plan.code === "pro";
             const bullets =
               FEATURE_BULLETS[plan.code] ?? FEATURE_BULLETS.free;
+            const PlanIcon = PLAN_ICONS[plan.code] ?? PLAN_ICONS.free;
             return (
               <div
                 key={plan.id}
@@ -74,6 +86,7 @@ export async function PricingCards() {
                   </div>
                 )}
 
+                <PlanIcon className="mb-3 h-10 w-10" />
                 <div className="text-sm font-bold uppercase tracking-wider text-brand-600">
                   {plan.name}
                 </div>

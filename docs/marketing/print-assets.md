@@ -1,10 +1,10 @@
-# Print Asset Specs — Xpenz 90-Day Builder Launch
+# Print Asset Specs — Xpenz 90-Day Launch
 
-Two pieces. Both designed to hand to a builder at an event, drop on a job site, or stick in a binder.
+Two pieces. Both designed to hand to an independent worker at an event, drop on a coworking-space corkboard, or stick in a portfolio binder.
 
 **Primary CTA on every piece:** `xpenz.us` with a QR code.
 
-**No mention of any specific builder coach or named community.** Generic "investor-builders" / "builders" framing only.
+**No mention of any specific coach, mastermind, or named community.** Generic "independents / self-employed / small business" framing only.
 
 ---
 
@@ -39,7 +39,7 @@ Two pieces. Both designed to hand to a builder at an event, drop on a job site, 
 ```
 
 - **Wordmark** (top-left): "Xpenz" in Inter ExtraBold, white on navy.
-- **QR code** (top-right): scan target = `https://xpenz.us/?utm_source=card&utm_medium=print&utm_campaign=builders90`
+- **QR code** (top-right): scan target = `https://xpenz.us/?utm_source=card&utm_medium=print&utm_campaign=launch90`
 - **Headline:** "Snap a receipt. Done." — Inter ExtraBold, ~22pt
 - **Offer line:** "90 days free. No credit card." — Inter Semibold, amber accent
 - **URL:** "xpenz.us" — Inter Bold
@@ -49,12 +49,11 @@ Two pieces. Both designed to hand to a builder at an event, drop on a job site, 
 ```
 +------------------------------------------+
 |                                          |
-|   For investor-builders running          |
-|   3–30 active jobs.                      |
+|   For independents and small businesses. |
 |                                          |
-|   ✓  Snap receipts on-site               |
+|   ✓  Snap receipts wherever you work     |
 |   ✓  Tag every expense to a project      |
-|   ✓  Track every sub for 1099s           |
+|   ✓  Track contractors for 1099s         |
 |   ✓  Export CSV your CPA loves           |
 |                                          |
 |   xpenz.us  ·  90 days free              |
@@ -101,7 +100,7 @@ Background: white. Type: Inter, 9–10pt for bullets, dark gray (#1f2937). Amber
 |   Snap a receipt.                                |
 |   Done.                                          |
 |                                                  |
-|   Built for investor-builders.                   |
+|   Built for the self-employed.                   |
 |                                                  |
 |   ============================================   |
 |   |                                          |   |
@@ -115,13 +114,13 @@ Background: white. Type: Inter, 9–10pt for bullets, dark gray (#1f2937). Amber
 |   ✓  AI receipt scan — vendor, amount,           |
 |      category in 3 seconds                       |
 |                                                  |
-|   ✓  Per-project allocation — know which         |
-|      job is bleeding cash before it closes       |
+|   ✓  Per-project / per-client allocation —       |
+|      know which work is making money             |
 |                                                  |
-|   ✓  Subcontractor + 1099 tracking — 1099        |
+|   ✓  Contractor + 1099 tracking — 1099           |
 |      season stops being a fire drill             |
 |                                                  |
-|   ✓  Schedule C tax categories — 20+ IRS lines  |
+|   ✓  Schedule C tax categories — 20+ IRS lines   |
 |      mapped out of the box                       |
 |                                                  |
 |   ✓  CSV export your CPA actually wants          |
@@ -136,7 +135,7 @@ Background: white. Type: Inter, 9–10pt for bullets, dark gray (#1f2937). Amber
 |   |                                          |   |
 |   ============================================   |
 |                                                  |
-|   Made for the trades.                           |
+|   Made for people who run their own work.        |
 |                                                  |
 +--------------------------------------------------+
 ```
@@ -145,7 +144,7 @@ Background: white. Type: Inter, 9–10pt for bullets, dark gray (#1f2937). Amber
 
 - **Wordmark:** Inter ExtraBold, 36pt, navy.
 - **Headline ("Snap a receipt. Done."):** Inter Black, 72pt, navy with amber drop on "Done."
-- **Subheading ("Built for investor-builders."):** Inter Semibold, 24pt, brand blue.
+- **Subheading ("Built for the self-employed."):** Inter Semibold, 24pt, brand blue.
 - **Bullet body:** Inter Medium, 16pt, dark gray.
 - **Promo box:** amber background (#f59e0b), white text, 32pt Inter ExtraBold for "90 DAYS FREE PRO."
 
@@ -155,7 +154,7 @@ If the venue's printer is b&w only, design must legibly degrade to grayscale. Do
 
 ### QR code URL
 
-`https://xpenz.us/?utm_source=flyer&utm_medium=print&utm_campaign=builders90`
+`https://xpenz.us/?utm_source=flyer&utm_medium=print&utm_campaign=launch90`
 
 Test with three different phones (iPhone front camera, Android default, older iPhone) before sending to the printer.
 
@@ -172,7 +171,7 @@ Test with three different phones (iPhone front camera, Android default, older iP
 ### What to bring to events
 
 - 250 business cards in shirt pocket / wallet
-- 50 flyers stacked on the table or near a coffee station
+- 50 flyers stacked on a table or near a coffee station
 - A Sharpie — sometimes the personal scribble on the back of a card ("hit me up — Seb") is what gets remembered
 
 ### Tracking attribution
@@ -181,6 +180,19 @@ Every printed asset MUST have a UTM-tagged URL or QR code so you can see in anal
 
 ---
 
+## Where to drop these
+
+Good venues for in-person distribution to a broad independent audience:
+
+- Coworking spaces (WeWork, Industrious, Regus, local co-ops) — leave a stack on the coffee bar
+- Freelance / creative meetups (local Meetup.com chapters)
+- Small-business expos
+- Industry conferences (Photo Plus, Adobe MAX, design conferences, real estate investing meetups)
+- Tax / CPA office waiting rooms (with permission)
+- Library bulletin boards (many libraries host small-business / freelance support programs)
+
+---
+
 ## Generation
 
-To produce the actual PDF files, use the `pdf` skill with the layouts above. If Seb wants the build, ask and we'll generate proofs.
+To produce the actual PDF files, use the `pdf` skill with the layouts above. If you want the build done, ask and we'll generate proofs.

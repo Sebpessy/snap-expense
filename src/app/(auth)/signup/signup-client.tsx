@@ -48,7 +48,7 @@ export function SignupClient() {
         <Logo variant="icon" size={72} className="mb-3 rounded-2xl shadow-sm" />
         <h1 className="text-3xl font-bold text-gray-900">Create account</h1>
         <p className="mt-2 text-sm text-gray-500">
-          Built for investor-builders. 90 days of Pro, free.
+          Built for the self-employed. 90 days of Pro, free.
         </p>
       </div>
 

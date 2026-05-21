@@ -1,40 +1,40 @@
 import {
-  ScanLine,
-  MapPinned,
-  Users,
-  FileSpreadsheet,
-  CreditCard,
-  Receipt,
-} from "lucide-react";
+  FeatureScanTile,
+  FeatureProjectsTile,
+  FeatureLedgerTile,
+  FeatureCategoriesTile,
+  FeaturePaymentsTile,
+  FeatureExportTile,
+} from "./illustrations";
 
 const FEATURES = [
   {
-    icon: ScanLine,
+    tile: FeatureScanTile,
     title: "AI receipt scan",
-    body: "Claude Vision reads the merchant, total, date, and category off the photo. You snap — it types.",
+    body: "Claude Vision pulls the vendor, total, date, tax category, and even your card's last 4 — straight off the photo. You snap, it types.",
   },
   {
-    icon: MapPinned,
+    tile: FeatureProjectsTile,
     title: "Per-project allocation",
-    body: "Tag every expense to a specific job site. Finally know which house is bleeding cash before it closes.",
+    body: "Tag every expense to a specific project or client. Finally know which work is making money before it wraps.",
   },
   {
-    icon: Users,
-    title: "Subcontractor ledger",
-    body: "Track every sub, their trade, and exactly what you paid them. 1099 season stops being a fire drill.",
+    tile: FeatureLedgerTile,
+    title: "Pay-anyone ledger",
+    body: "Track every contractor, vendor, and freelancer you pay. 1099 season stops being a fire drill.",
   },
   {
-    icon: Receipt,
+    tile: FeatureCategoriesTile,
     title: "Schedule C categories",
-    body: "20+ IRS-mapped expense buckets. Contract labor, materials, repairs, vehicle — it's already filed for you.",
+    body: "20+ IRS-mapped expense buckets. Contract labor, supplies, software, travel, vehicle — already filed for you.",
   },
   {
-    icon: CreditCard,
+    tile: FeaturePaymentsTile,
     title: "Payment-method audit trail",
     body: "Log credit card last-4, check number, Zelle reference, or wire. Audit-ready without lifting a finger.",
   },
   {
-    icon: FileSpreadsheet,
+    tile: FeatureExportTile,
     title: "CSV export for your CPA",
     body: "One click, one file, everything they need. Hand off your books in seconds, not an afternoon.",
   },
@@ -52,8 +52,8 @@ export function FeatureGrid() {
             Six tools that replace the shoebox.
           </h2>
           <p className="mt-5 text-lg text-gray-600">
-            Built around how investor-builders actually work — not how generic
-            expense apps think you should.
+            Built around how independent professionals actually work — not how
+            generic expense apps think you should.
           </p>
         </div>
 
@@ -61,15 +61,15 @@ export function FeatureGrid() {
           {FEATURES.map((f) => (
             <div
               key={f.title}
-              className="group rounded-2xl border border-gray-200 bg-white p-7 transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lg hover:shadow-brand-100/60"
+              className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lg hover:shadow-brand-100/60"
             >
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-600 group-hover:text-white">
-                <f.icon size={24} strokeWidth={2} />
+              <f.tile className="block h-36 w-full" />
+              <div className="px-7 pb-7 pt-6">
+                <h3 className="text-lg font-bold text-gray-900">{f.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
+                  {f.body}
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-gray-900">{f.title}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-gray-600">
-                {f.body}
-              </p>
             </div>
           ))}
         </div>

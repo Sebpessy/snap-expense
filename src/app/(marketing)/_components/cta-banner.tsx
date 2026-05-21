@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { CTAPattern } from "./illustrations";
 
 export function CTABanner() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-amber-400 via-amber-300 to-amber-400 py-20 lg:py-24">
+      <CTAPattern className="absolute inset-0 h-full w-full" />
       <div
         aria-hidden
         className="absolute inset-0 opacity-20"
@@ -16,11 +18,11 @@ export function CTABanner() {
         <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
           Stop losing receipts.
           <br />
-          Start running jobs like a CFO.
+          Start running your business like a CFO.
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-gray-800/90">
-          90 days of Pro, on the house. No credit card. Your tax season
-          gets quieter starting the day you sign up.
+          90 days of Pro, on the house. No credit card. Your tax season gets
+          quieter starting the day you sign up.
         </p>
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Link

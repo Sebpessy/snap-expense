@@ -1,6 +1,6 @@
-# Marketing — Xpenz 90-Day Builder Launch
+# Marketing — Xpenz 90-Day Launch
 
-Generic "investor-builders / GCs / flippers" framing throughout. No reference to any specific builder coach or named community in any deliverable — verified by grep before each ship.
+Generic, broad-audience framing throughout. Target: independent workers and small business owners — freelancers, consultants, contractors, agencies, e-commerce sellers, photographers, trades, anyone with 1099 income or self-employment expenses. No coach / community / niche references in any deliverable — verified by grep before each ship.
 
 ## Deliverables in this folder
 
@@ -20,11 +20,11 @@ Generic "investor-builders / GCs / flippers" framing throughout. No reference to
 
 ## UTM convention (use everywhere)
 
-`?utm_source={source}&utm_medium={medium}&utm_campaign=builders90&utm_content={creative}`
+`?utm_source={source}&utm_medium={medium}&utm_campaign=launch90&utm_content={creative}`
 
-- `utm_source`: `ig`, `fb`, `meta`, `google`, `card`, `flyer`, `email`, `dm`
+- `utm_source`: `ig`, `fb`, `meta`, `google`, `card`, `flyer`, `email`, `dm`, `tiktok`
 - `utm_medium`: `dm`, `cpc`, `print`, `organic`, `email`
-- `utm_campaign`: always `builders90` for this push
+- `utm_campaign`: always `launch90` for this push
 - `utm_content`: specific creative identifier
 
 ## Operating cadence
@@ -38,6 +38,6 @@ Generic "investor-builders / GCs / flippers" framing throughout. No reference to
 
 ## What's NOT in scope yet
 
-- Transactional email sender (Resend/Postmark) for the in-product drip — flagged as phase 2.
+- Transactional email sender (Resend / Postmark) for the in-product drip — flagged as phase 2.
 - UTM persistence on `profiles` for attribution-in-app — flagged in the original plan as optional.
 - Direct QuickBooks Online sync — CSV export only today.

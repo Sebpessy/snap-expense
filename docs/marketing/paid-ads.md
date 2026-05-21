@@ -1,39 +1,44 @@
-# Paid Ads — Xpenz 90-Day Builder Launch
+# Paid Ads — Xpenz 90-Day Launch
 
 **Budget framing:** test with $20–40/day on Meta for 2 weeks before scaling. Google Ads layered on top once Meta is profitable.
 
 **Tracking goal:** see signup → trial-active → paid conversion by channel. Set up a UTM convention before spending anything.
 
 **UTM convention:**
-- `utm_source` — `meta` / `google` / `tiktok`
+- `utm_source` — `meta` / `google` / `tiktok` / `linkedin`
 - `utm_medium` — `cpc`
-- `utm_campaign` — `builders90`
+- `utm_campaign` — `launch90`
 - `utm_content` — ad creative identifier (`problem-led-v1`, `proof-led-v2`, etc.)
 
-**No mention of any specific builder coach or named community.** Generic "investor-builders" / "GCs" / "flippers" only.
+**No mention of any specific coach, mastermind, or named community** in ad creative. Generic "independents / self-employed / freelancers / small business" only.
 
 ---
 
 ## Meta Ads (Facebook + Instagram)
 
-Meta is the priority channel — the target investor-builder audience lives on Instagram and Facebook.
+Meta is the priority channel — broad self-employed and small-business audiences live on Instagram and Facebook.
 
 ### Audience targeting
 
-**Test audience 1 — Builder interests:**
-- Interests: General Contractor, Real estate investing, House flipping, Construction management, Construction
-- Age: 28–55
+**Test audience 1 — Self-employed interests:**
+- Interests: Self-employment, Small business, Freelancing, Entrepreneurship, Sole proprietorship
+- Age: 25–55
 - Geo: United States (start nationwide, narrow to top-converting states after 14 days)
 - Detailed targeting expansion: ON
 
-**Test audience 2 — Lookalike (after you have 100+ signups):**
-- LAL 1% of your `signup_complete` event
-- Same geo + age as audience 1
-
-**Test audience 3 — Real estate investor angle:**
-- Interests: BiggerPockets, Real estate investing, Fix and flip, Rental property
+**Test audience 2 — Creative/agency interests:**
+- Interests: Graphic design, Photography business, Freelance writing, Copywriting, Web design, Marketing agency
 - Same geo + age
 - Behaviors: Small business owners
+
+**Test audience 3 — Service / trades interests:**
+- Interests: General contractor, Real estate investing, House flipping, Consulting, Coaching (business)
+- Same geo + age
+- Behaviors: Engaged shoppers
+
+**Test audience 4 — Lookalike (after you have 100+ signups):**
+- LAL 1% of your `signup_complete` event
+- Same geo + age as audience 1
 
 ### Placements
 
@@ -49,41 +54,41 @@ Skip Audience Network and Messenger placements — they waste budget on low-inte
 
 #### Variant 1: Problem-led
 
-**Format:** vertical video, 9:16, 15s reel from the social content doc ("Truck door receipt")
+**Format:** vertical video, 9:16, 15s reel from the social content doc ("Receipt avalanche")
 
 **Primary text:**
-> Every year. Same pile of receipts on the dashboard. Same April panic. Same CPA bill that doubles because they have to sort it.
+> Every year. Same pile of receipts in your bag / inbox / desk drawer. Same April panic. Same CPA bill that doubles because they have to sort it.
 >
-> Snap receipts straight from the job site — AI tags the vendor, project, sub, and tax category. 90 days free. No credit card.
+> Snap receipts straight from your phone — AI tags the vendor, project, client, and tax category. 90 days free. No credit card.
 
 **Headline:** "Stop losing receipts. 90 days free."
 
-**Description:** "Built for investor-builders running 3–30 jobs."
+**Description:** "Built for independents and small business owners."
 
 **CTA button:** "Sign Up"
 
-**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=builders90&utm_content=problem-led-v1`
+**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=launch90&utm_content=problem-led-v1`
 
 ---
 
 #### Variant 2: Proof-led
 
-**Format:** single image — clean dashboard screenshot showing 4 projects with per-project totals.
+**Format:** single image — clean dashboard screenshot showing 4 active client projects with per-project totals.
 
 **Primary text:**
-> One builder, four flips. After 90 days of Xpenz he realized one job was bleeding $1,800/mo in unbilled materials. He'd been working it for months thinking it was fine.
+> One freelancer, four clients. After 90 days of Xpenz she realized one client was costing her $1,800/mo in unbilled materials + software. She'd been working that client for months thinking it was fine.
 >
-> That's the part QuickBooks doesn't tell you — which job specifically is the problem. Xpenz does.
+> That's the part QuickBooks doesn't tell you — which project specifically is the problem. Xpenz does.
 >
 > 90 days free. No credit card.
 
-**Headline:** "Know which job is bleeding cash."
+**Headline:** "Know which client is bleeding cash."
 
-**Description:** "Per-project expense tracking for builders."
+**Description:** "Per-project expense tracking for independents."
 
 **CTA:** "Learn More" → landing page
 
-**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=builders90&utm_content=proof-led-v1`
+**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=launch90&utm_content=proof-led-v1`
 
 ---
 
@@ -94,17 +99,17 @@ Skip Audience Network and Messenger placements — they waste budget on low-inte
 **Primary text:**
 > 90 days of Pro. Free. No credit card.
 >
-> Snap a receipt. AI fills in vendor, amount, project, sub, tax category — in 3 seconds. CSV exports your CPA loves.
+> Snap a receipt. AI fills in vendor, amount, project, client, tax category — in 3 seconds. CSV exports your CPA loves.
 >
-> If you're a builder running 3+ jobs, this is the tool you've been writing in your head.
+> If you're self-employed or running a small business, this is the tool you've been writing in your head.
 
 **Headline:** "90 days free Pro — Xpenz"
 
-**Description:** "Receipt scanner + job costing for builders."
+**Description:** "Receipt scanner + project tracking for independents."
 
 **CTA:** "Sign Up"
 
-**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=builders90&utm_content=offer-led-v1`
+**Destination:** `https://xpenz.us/?utm_source=meta&utm_medium=cpc&utm_campaign=launch90&utm_content=offer-led-v1`
 
 ---
 
@@ -115,7 +120,7 @@ Skip Audience Network and Messenger placements — they waste budget on low-inte
 - **Day 15+:** If cost per signup ≤ $25, scale to $50–80/day. If cost per signup > $50, pause and rework creative — don't throw money at bad ads.
 
 **Target CAC math:**
-- Pro plan = $9.99/mo. Average builder who converts probably stays 12+ months → LTV ~$120.
+- Pro plan = $9.99/mo. Average user who converts probably stays 12+ months → LTV ~$120.
 - Target CAC: ≤ 33% of LTV → $40 per paid signup is the ceiling.
 - Plenty of slack for $20–25 per signup at launch pricing.
 
@@ -129,33 +134,33 @@ Layer Google on top of Meta after week 2. Lower volume, higher intent.
 
 | Group | Sample keywords | Notes |
 |-------|-----------------|-------|
-| Contractor expense tools | "contractor expense app", "construction expense tracker", "general contractor accounting app" | High commercial intent, mid-volume |
-| Job costing | "job costing software", "construction job cost tracker", "flip cost tracker app" | Builders actively shopping |
-| Receipt scanners | "receipt scanner app for business", "AI receipt scanner", "scan receipts for taxes" | Broader audience — exclude bookkeeper keywords |
-| 1099 tracking | "1099 contractor tracker", "subcontractor payment tracker", "track payments to subs" | January spike — schedule budget for Q1 lift |
-| Schedule C / small biz tax | "schedule C app", "self employed expense tracker", "tax categories for contractors" | Lower volume but specific |
+| Self-employed expense apps | "self employed expense tracker", "1099 expense tracker", "freelancer expense app", "sole proprietor receipt scanner" | High commercial intent, mid-volume |
+| Small business receipt scanners | "small business receipt scanner", "AI receipt scanner business", "scan receipts for taxes" | Broader, exclude bookkeeper keywords |
+| Project / client tracking | "freelance project tracker", "client expense tracker", "track expenses per client" | Independents actively shopping |
+| 1099 / contractor tracking | "1099 contractor tracker", "track payments to freelancers", "contractor payment tracker" | January spike — schedule budget for Q1 lift |
+| Schedule C / tax categories | "schedule C app", "self employed tax categories", "irs schedule C tracker" | Lower volume but specific |
 
 ### Sample RSAs (Responsive Search Ads)
 
-#### Group 1 — Contractor expense tools
+#### Group 1 — Self-employed expense apps
 
 **Headlines (15 max, pick 10–12):**
 - Receipts → categorized in 3 seconds
-- For investor-builders & GCs
+- For freelancers & small business
 - Snap, tag, export. 90 days free.
-- The contractor expense app
+- The expense app for independents
 - 90 days free Pro · No credit card
-- Built for the truck seat, not the office
+- Built for your phone, not a cubicle
 - Per-project expense tracking
 - Schedule C ready out of the box
 - 1099 totals when you need them
-- AI receipt scanner for builders
+- AI receipt scanner for independents
 
 **Descriptions (4 max):**
-- Snap a receipt, AI tags vendor, project, sub, tax category. CSV export. 90 days free.
-- Built for builders running 3–30 jobs. Per-project tracking, sub directory, tax-ready export.
+- Snap a receipt, AI tags vendor, project, client, tax category. CSV export. 90 days free.
+- Built for self-employed and small business. Per-project tracking, contractor directory, tax-ready export.
 - Stop losing receipts. Per-project cost tracking. 1099 totals ready in January. Try free for 90 days.
-- No credit card required. Built by a builder, for builders. Sign up at xpenz.us.
+- No credit card required. Built by an independent, for independents. Sign up at xpenz.us.
 
 ### Negative keywords (exclude these)
 
@@ -165,11 +170,28 @@ Layer Google on top of Meta after week 2. Lower volume, higher intent.
 - `download`
 - `course`
 - `job estimating` (different product)
+- `corporate`
+- `enterprise`
 
 ### Google budget
 
 - Start: $10/day on each of the top 2 groups
 - Scale on top of any keyword with CPA ≤ $30
+
+---
+
+## LinkedIn (optional, phase 2)
+
+LinkedIn fits the consultant / agency / freelance-professional segment. Higher CPC ($8–15) but much higher intent if targeted well.
+
+**Test audience:**
+- Job titles: Freelance / Consultant / Owner / Founder / Solo Practitioner / Self-Employed
+- Company size: 1–10 employees (and "Self-Employed" company)
+- Industries: Design, Photography, Writing, Marketing, IT, Real Estate, Construction, Consulting
+
+**Format:** single-image sponsored content or carousel.
+
+**Budget:** $30/day for 2-week test, before scaling.
 
 ---
 
@@ -182,8 +204,8 @@ Skip at launch. Revisit if Meta CPA is great and you want to scale volume. The s
 ## What NOT to spend money on
 
 - **Programmatic display banners** — wasted budget for SaaS at this stage.
-- **LinkedIn Ads** — your audience is on IG, not LinkedIn.
 - **YouTube pre-roll** — too expensive for the funnel size today.
+- **X/Twitter Ads** — high cost, low conversion for independent-audience SaaS.
 
 ---
 

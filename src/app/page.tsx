@@ -6,7 +6,7 @@ import { SocialStrip } from "./(marketing)/_components/social-strip";
 import { ProblemBlock } from "./(marketing)/_components/problem-block";
 import { FeatureGrid } from "./(marketing)/_components/feature-grid";
 import { HowItWorks } from "./(marketing)/_components/how-it-works";
-import { BuiltForBuilders } from "./(marketing)/_components/built-for-builders";
+import { BuiltForIndependents } from "./(marketing)/_components/built-for-independents";
 import { PricingCards } from "./(marketing)/_components/pricing-cards";
 import { FAQ } from "./(marketing)/_components/faq";
 import { CTABanner } from "./(marketing)/_components/cta-banner";
@@ -30,7 +30,7 @@ export default async function Home() {
       <ProblemBlock />
       <FeatureGrid />
       <HowItWorks />
-      <BuiltForBuilders />
+      <BuiltForIndependents />
       <PricingCards />
       <FAQ />
       <CTABanner />
