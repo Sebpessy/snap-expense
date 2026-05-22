@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { MarketingNav } from "./(marketing)/_components/marketing-nav";
 import { Hero } from "./(marketing)/_components/hero";
+import { DemoVideo } from "./(marketing)/_components/demo-video";
 import { SocialStrip } from "./(marketing)/_components/social-strip";
 import { ProblemBlock } from "./(marketing)/_components/problem-block";
 import { FeatureGrid } from "./(marketing)/_components/feature-grid";
@@ -28,6 +29,9 @@ export default async function Home() {
       <MarketingNav />
       {/* Hero handles its own motion internally (headline cascade + parallax) */}
       <Hero />
+      <Reveal>
+        <DemoVideo />
+      </Reveal>
       <Reveal>
         <HowItWorks />
       </Reveal>

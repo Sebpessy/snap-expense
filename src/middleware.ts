@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/api/webhooks") ||
     pathname === "/manifest.json" ||
     pathname === "/favicon.ico" ||
-    pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico)$/)
+    pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|mp4|webm|mov|m4v|ogv)$/)
   ) {
     return NextResponse.next();
   }
