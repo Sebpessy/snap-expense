@@ -32,6 +32,49 @@ export function SignupClient() {
       return;
     }
 
+    // Fire signup webhook (fire-and-forget — never blocks UX). Picks up
+    // UTM params from the current URL if the user came from a tagged link.
+    const utm: Record<string, string> = {};
+    try {
+      const url = new URL(window.location.href);
+      for (const k of [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_content",
+        "utm_term",
+      ]) {
+        const v = url.searchParams.get(k);
+        if (v) utm[k.replace(/^utm_/, "")] = v;
+      }
+    } catch {}
+
+    const beaconBody = JSON.stringify({
+      email,
+      userId: data.user?.id ?? null,
+      emailConfirmationRequired: !data.session,
+      utm: Object.keys(utm).length ? utm : null,
+      referrer: typeof document !== "undefined" ? document.referrer || null : null,
+    });
+
+    try {
+      if ("sendBeacon" in navigator) {
+        navigator.sendBeacon(
+          "/api/webhooks/signup",
+          new Blob([beaconBody], { type: "application/json" }),
+        );
+      } else {
+        fetch("/api/webhooks/signup", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: beaconBody,
+          keepalive: true,
+        }).catch(() => {});
+      }
+    } catch {
+      // never block signup on a webhook failure
+    }
+
     // If email confirmation is required, the session will be null
     if (data.session) {
       router.push("/capture");
